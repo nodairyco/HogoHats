@@ -23,8 +23,16 @@ const registerUser = async (req, res) => {
             password: hashedPassword
         })
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '30d'
+        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '15m'
+        });
+        const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         });
 
         res.status(201).json({
@@ -32,7 +40,7 @@ const registerUser = async (req, res) => {
             username: user.username,
             email: user.email,
             isAdmin: user.isAdmin,
-            token
+            accessToken
         });
 
     } catch{
@@ -40,6 +48,63 @@ const registerUser = async (req, res) => {
     }
 }
 
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email or password' });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid email or password' });
+        }
+        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '15m'
+        });
+        const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, {
+            expiresIn: '30d'
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        });
+
+        res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            accessToken
+        });
+    }
+    catch{
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+const refreshToken = async (req, res) => {
+    const token = req.cookies.refreshToken;
+    if (!token) {
+        return res.status(401).json({ message: 'No refresh token provided' });
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        const accessToken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, {expiresIn: '15m'});
+        res.status(200).json({ accessToken });
+    }catch {
+        res.status(403).json({ message: 'Invalid or exipred refresh token' });
+    }
+}
+
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser,
+    refreshToken
 };
