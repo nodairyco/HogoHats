@@ -6,14 +6,20 @@ const cors = require('cors');
 
 const app = express();
 
+// Routes
+const userRoutes = require('./routes/userRoutes');
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
 
 // Test route
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
+
+app.use('/api/users', userRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
