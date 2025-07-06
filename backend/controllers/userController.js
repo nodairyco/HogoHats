@@ -27,6 +27,8 @@ const registerUser = async (req, res) => {
             expiresIn: '15m'
         });
         const refreshToken = jwt.sign({id: user._id}, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
+        user.refreshToken = refreshToken;
+        await user.save();
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -68,6 +70,8 @@ const loginUser = async (req, res) => {
         const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, {
             expiresIn: '30d'
         });
+        user.refreshToken = refreshToken;
+        await user.save();
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -89,6 +93,28 @@ const loginUser = async (req, res) => {
     }
 }
 
+const logoutUser = async (req, res) => {
+    const token = req.cookies.refreshToken;
+    if (token){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+            const user = await User.findById(decoded.id);
+            if (user) {
+                user.refreshToken = null;
+                await user.save();
+            }
+        } catch {
+            res.status(403).json({ message: 'Invalid or expired refresh token' });
+        }
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+        });
+        return res.status(200).json({ message: 'Logged out successfully' });
+    }
+}
+
 const refreshToken = async (req, res) => {
     const token = req.cookies.refreshToken;
     if (!token) {
@@ -96,6 +122,10 @@ const refreshToken = async (req, res) => {
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        const user = await User.findById(decoded.id);
+        if (!user || user.refreshToken !== token) {
+            return res.status(403).json({ message: 'Invalid refresh token' });
+        }
         const accessToken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, {expiresIn: '15m'});
         res.status(200).json({ accessToken });
     }catch {
@@ -106,5 +136,6 @@ const refreshToken = async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
-    refreshToken
+    refreshToken,
+    logoutUser
 };
