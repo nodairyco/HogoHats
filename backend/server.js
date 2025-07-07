@@ -4,9 +4,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const swaggerDocs = require('./config/swagger');
 
 const app = express();
 
+swaggerDocs(app);
 // Routes
 const userRoutes = require('./routes/userRoutes');
 
