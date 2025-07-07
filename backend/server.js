@@ -20,8 +20,6 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
-// TEMP: Testing JWT & admin middleware — delete before deploying
-app.use('/api/test', testRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
