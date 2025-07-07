@@ -9,7 +9,6 @@ const app = express();
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
-const testRoutes = require('./routes/testRoutes');
 
 // Middleware
 app.use(cors({
