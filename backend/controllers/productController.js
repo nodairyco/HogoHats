@@ -5,11 +5,11 @@ const cloudinary = require('../config/cloudinary');
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = async (req, res) => {
-    const { name, description, price, category } = req.body;
+    const { name, description, price, category, stock } = req.body;
     const files = req.files;
 
     // Validate required fields
-    if (!name || !price || !category) {
+    if (!name || !price || !category || stock === undefined || stock === null) {
         return res.status(400).json({ message: 'Please fill in all required fields.' });
     }
 
@@ -29,6 +29,12 @@ const createProduct = async (req, res) => {
         return res.status(400).json({ message: 'Price must be a positive number.' });
     }
 
+    // Validate stock
+    const numericStock = parseInt(stock, 10);
+    if (isNaN(numericStock) || numericStock < 0) {
+        return res.status(400).json({ message: 'Stock must be a non-negative number.' });
+    }
+
     try {
         const images = files.map(file => {
             if (!file.path) {
@@ -45,7 +51,8 @@ const createProduct = async (req, res) => {
             description,
             price: numericPrice,
             images: images,
-            category
+            category,
+            stock
         });
 
         const createdProduct = await product.save();
@@ -89,11 +96,11 @@ const getProductById = async (req, res) => {
 // @access  Private/Admin
 const updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, description, price, category } = req.body;
+    const { name, description, price, category, stock } = req.body;
     const files = req.files;
 
     // Validate required fields
-    if (!name || !price || !category) {
+    if (!name || !price || !category || stock === undefined || stock === null) {
         return res.status(400).json({ message: 'Please fill in all required fields.' });
     }
 
@@ -111,6 +118,12 @@ const updateProduct = async (req, res) => {
     const numericPrice = parseFloat(price);
     if (isNaN(numericPrice) || numericPrice <= 0) {
         return res.status(400).json({ message: 'Price must be a positive number.' });
+    }
+
+    // Validate stock
+    const numericStock = parseInt(stock, 10);
+    if (isNaN(numericStock) || numericStock < 0) {
+        return res.status(400).json({ message: 'Stock must be a non-negative number.' });
     }
 
     try {
@@ -146,7 +159,8 @@ const updateProduct = async (req, res) => {
             description,
             price: numericPrice,
             images: images,
-            category
+            category,
+            stock: numericStock
         }, { new: true });
 
         if (!product) {
