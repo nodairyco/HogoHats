@@ -11,14 +11,16 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    imageUrl: {
-        type: String,
-        required: true,
-    },
+  images: [
+    {
+      url: { type: String, required: true },
+      public_id: { type: String }
+    }
+    ],
     category: {
         type: String,
         required: true,
-        enum: ['men', 'women', 'kids', 'permium']
+        enum: ['men', 'women', 'kids', 'premium']
     },
     }, {
         timestamps: true,

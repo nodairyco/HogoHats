@@ -4,12 +4,18 @@ const Product = require('../models/Product');
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = async (req, res) => {
-    const { name, description, price, imageUrl, category } = req.body;
+    const { name, description, price, images, category } = req.body;
 
     // Validate required fields
-    if (!name || !price || !imageUrl || !category) {
+    if (!name || !price || !images || !category) {
         return res.status(400).json({ message: 'Please fill in all required fields.' });
     }
+
+    // Validate images
+    if (!Array.isArray(images) || images.length === 0) {
+        return res.status(400).json({ message: 'Images must be an array with at least one image.' });
+    }
+
     // Validate category
     const validCategories = ['men', 'women', 'kids', 'premium'];
     if (!validCategories.includes(category)) {
@@ -25,7 +31,10 @@ const createProduct = async (req, res) => {
             name,
             description,
             price,
-            imageUrl,
+            images: images.map(image => ({
+                url: image.url,
+                public_id: image.public_id || null 
+            })),
             category
         });
 
@@ -70,12 +79,18 @@ const getProductById = async (req, res) => {
 // @access  Private/Admin
 const updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, description, price, imageUrl, category } = req.body;
+    const { name, description, price, images, category } = req.body;
 
     // Validate required fields
-    if (!name || !price || !imageUrl || !category) {
+    if (!name || !price || !images || !category) {
         return res.status(400).json({ message: 'Please fill in all required fields.' });
     }
+
+    // Validate images
+    if (!Array.isArray(images) || images.length === 0) {
+        return res.status(400).json({ message: 'Images must be an array with at least one image.' });
+    }
+
     // Validate category
     const validCategories = ['men', 'women', 'kids', 'premium'];
     if (!validCategories.includes(category)) {
@@ -91,7 +106,10 @@ const updateProduct = async (req, res) => {
             name,
             description,
             price,
-            imageUrl,
+            images: images.map(image => ({
+                url: image.url,
+                public_id: image.public_id || null 
+            })),
             category
         }, { new: true });
 
