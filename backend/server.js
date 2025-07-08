@@ -11,6 +11,7 @@ const app = express();
 swaggerDocs(app);
 // Routes
 const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 // Middleware
 app.use(cors({
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
