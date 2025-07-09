@@ -1,6 +1,7 @@
 const express = require('express');
+const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
-const { registerUser, loginUser, refreshToken, logoutUser } = require('../controllers/userController');
+const { registerUser, loginUser, refreshToken, logoutUser, verifyUserEmail, forgotPassword, resetPassword } = require('../controllers/userController');
 
 /**
  * @swagger
@@ -88,6 +89,10 @@ router.post('/refresh', refreshToken);
  *       403:
  *         description: Invalid or expired refresh token
  */
-router.post('/logout', logoutUser);
+router.post('/logout', protect, logoutUser);
+
+router.get('/verify-email', verifyUserEmail);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 
 module.exports = router;
