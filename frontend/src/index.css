@@ -1,0 +1,10 @@
+:root{
+    --bg-color: #28292d;
+    --accent-1: #5c342c;
+}
+
+body, html, #root{
+    margin: 0;
+    background-color: var(--bg-color); 
+    overflow-x: hidden;
+}
