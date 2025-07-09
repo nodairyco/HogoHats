@@ -3,6 +3,7 @@ import {Routes, Route, Navigate} from "react-router-dom";
 import {Box, Container} from "@mui/material";
 import registrationCss from './components/registration/Registration.module.css'
 import Home from "./components/home/Home.jsx";
+import LoginPage from "./components/registration/LoginPage.jsx";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
                     </h1>
                     <Routes>
                         <Route path='/signup' element={<SignUpPage/>}/>
+                        <Route path='/login' element={<LoginPage/>}/>
                     </Routes>
                 </Box>
             </Container>
