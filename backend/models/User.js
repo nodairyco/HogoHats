@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false
   },
   isAdmin: {
     type: Boolean,
@@ -24,9 +25,17 @@ const userSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
     default: null,
-  }       
-},{
-    timestamps: true,
+  },   
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    default: null,
+  },
+}, {
+  timestamps: true,
 });
 
 const User = mongoose.model('User', userSchema);
