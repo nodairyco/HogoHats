@@ -1,0 +1,72 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 320px;
+    width: 100%;
+    padding: 24px 16px;
+    background: rgba(255, 255, 255, 0.59);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10.7px);
+    -webkit-backdrop-filter: blur(10.7px);
+}
+
+.formTextField input {
+}
+
+.formTextField label {
+}
+
+.registrationContainer {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    max-width: 320px;
+    width: 100%;
+    position: relative;
+}
+
+.formDecorationDiv {
+    position: absolute;
+    background-color: var(--accent-1);
+    width: 30vw;
+    height: 28vw;
+    max-width: 385px;
+    max-height: 360px;
+    border-radius: 30vw;
+    transform: translate(-30%, -10%);
+}
+
+.formDecorationH1 {
+    position: absolute;
+    border-radius: 30vw;
+    transform: translate(50px);
+    font-size: 200px;
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+.formHeader {
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    color: #544f4f;
+}
+
+.oppositeLink {
+    color: #544f4f
+}
+
+.linkContainer {
+    display: flex;
+    justify-content: flex-end;
+}
