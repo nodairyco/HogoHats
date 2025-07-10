@@ -1,11 +1,13 @@
-import SignUpPage from "./components/registration/SignUpPage.jsx";
 import {Routes, Route, Navigate} from "react-router-dom";
 import {Box, Container} from "@mui/material";
 import registrationCss from './components/registration/Registration.module.css'
-import Home from "./components/home/Home.jsx";
-import LoginPage from "./components/registration/LoginPage.jsx";
+import {lazy} from "react";
 
 function App() {
+
+    const SignUpPage = lazy(() => import("./components/registration/SignUpPage.jsx"))
+    const LoginPage = lazy(() => import("./components/registration/LoginPage.jsx"))
+    const Home = lazy(() => import("./components/home/Home.jsx"))
 
     return (
         <>
