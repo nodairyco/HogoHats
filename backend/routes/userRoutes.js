@@ -95,4 +95,8 @@ router.get('/verify-email', verifyUserEmail);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 
+router.get('/check-admin', protect, (req, res) => {
+    res.json({ isAdmin: req.user.isAdmin });
+});
+
 module.exports = router;
