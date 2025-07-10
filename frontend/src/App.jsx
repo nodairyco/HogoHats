@@ -8,6 +8,7 @@ function App() {
     const SignUpPage = lazy(() => import("./components/registration/SignUpPage.jsx"))
     const LoginPage = lazy(() => import("./components/registration/LoginPage.jsx"))
     const Home = lazy(() => import("./components/home/Home.jsx"))
+    const AdminPanel = lazy(() => import("./components/adminpanel/AdminPanel.jsx"))
 
     return (
         <>
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Navigate to='/signup'/>}/>
                     <Route path="/home" element={<Home/>}/>
+                    <Route path="/admin" element={<AdminPanel/>}/>
                 </Routes>
                 <Box className={registrationCss.registrationContainer}>
                     <div className={registrationCss.formDecorationDiv}/>
