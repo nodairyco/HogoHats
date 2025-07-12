@@ -1,32 +1,20 @@
 import SignUpPage from "./components/registration/SignUpPage.jsx";
 import {Routes, Route, Navigate} from "react-router-dom";
-import {Box, Container} from "@mui/material";
-import registrationCss from './components/registration/Registration.module.css'
+import {Box, ButtonGroupButtonContext, Container} from "@mui/material";
 import Home from "./components/home/Home.jsx";
 import LoginPage from "./components/registration/LoginPage.jsx";
 import AdminPanel from "./components/adminpanel/AdminPanel.jsx"
+import {createContext, Suspense, useState} from "react";
+
+export const context = createContext()
 
 function App() {
 
+    const [products, setProducts] = useState([])
+
     return (
         <>
-            <Container sx={{display: 'flex', height: '100vh', justifyContent: 'center'}}>
-                <Routes>
-                    <Route path="/" element={<Navigate to='/signup'/>}/>
-                    <Route path="/home" element={<Home/>}/>
-                    <Route path="/admin" element={<AdminPanel/>}/>
-                </Routes>
-                <Box className={registrationCss.registrationContainer}>
-                    <div className={registrationCss.formDecorationDiv}/>
-                    <h1 className={registrationCss.formDecorationH1}>
-                        Register
-                    </h1>
-                    <Routes>
-                        <Route path='/signup' element={<SignUpPage/>}/>
-                        <Route path='/login' element={<LoginPage/>}/>
-                    </Routes>
-                </Box>
-            </Container>
+            <context.Provider value={{products, setProducts}}>
                 <Container sx={{
                     display: 'flex', height: '100vh', justifyContent: 'center',
                 }} maxWidth={false}>
@@ -40,6 +28,7 @@ function App() {
                         </Routes>
                     </Suspense>
                 </Container>
+            </context.Provider>
         </>
     )
 }
