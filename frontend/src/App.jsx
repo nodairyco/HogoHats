@@ -16,8 +16,10 @@ function App() {
         <>
             <context.Provider value={{products, setProducts}}>
                 <Container sx={{
+                <main style={{
                     display: 'flex', height: '100vh', justifyContent: 'center',
-                }} maxWidth={false}>
+                    overflowY:'auto', flexDirection:'column'
+                }}>
                     <Suspense fallback={<div>loading</div>}>
                         <Routes>
                             <Route path="/" element={<Navigate to='/signup'/>}/>
@@ -27,8 +29,8 @@ function App() {
                             <Route path='/login' element={<LoginPage/>}/>
                         </Routes>
                     </Suspense>
-                </Container>
-            </context.Provider>
+                </main>
+            </productContext.Provider>
         </>
     )
 }
