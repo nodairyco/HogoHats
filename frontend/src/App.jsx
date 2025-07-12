@@ -27,6 +27,19 @@ function App() {
                     </Routes>
                 </Box>
             </Container>
+                <Container sx={{
+                    display: 'flex', height: '100vh', justifyContent: 'center',
+                }} maxWidth={false}>
+                    <Suspense fallback={<div>loading</div>}>
+                        <Routes>
+                            <Route path="/" element={<Navigate to='/signup'/>}/>
+                            <Route path="/home" element={<Home/>}/>
+                            <Route path="/admin" element={<AdminPanel/>}/>
+                            <Route path='/signup' element={<SignUpPage/>}/>
+                            <Route path='/login' element={<LoginPage/>}/>
+                        </Routes>
+                    </Suspense>
+                </Container>
         </>
     )
 }

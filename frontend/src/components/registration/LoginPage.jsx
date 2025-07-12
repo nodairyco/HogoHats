@@ -97,7 +97,7 @@ function LoginPage() {
             </form>
             <Box className={css.linkContainer}>
                 <Typography variant='p' color='primary.submain'>
-                    Already have an account?
+                    Don't have an account? 
                 </Typography>
                 <Link to='/signup' className={css.oppositeLink}>
                     Sign up

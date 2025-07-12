@@ -16,6 +16,8 @@
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10.7px);
     -webkit-backdrop-filter: blur(10.7px);
+    height: fit-content;
+    align-self: center;
 }
 
 .formTextField input {
@@ -63,10 +65,12 @@
 }
 
 .oppositeLink {
-    color: #544f4f
+    color: #3a3636
 }
 
 .linkContainer {
     display: flex;
     justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
 }
