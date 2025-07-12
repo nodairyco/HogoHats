@@ -4,6 +4,7 @@ import {productContext} from "../../App.jsx";
 import axios from "axios";
 import {Box, ImageList, ImageListItem, useMediaQuery, useTheme} from "@mui/material";
 import Typography from "@mui/material/Typography";
+import {useNavigate} from "react-router-dom";
 
 function Home() {
     const cookies = new Cookies(null, {path: '/'})
@@ -56,6 +57,7 @@ function MapItems() {
 
 function ItemCard({product}) {
     const [isFocused, setIsFocused] = useState(false)
+    const navigate = useNavigate()
     
     const capitalizeProductName = productName => {
         let lst = productName.split(' ')
@@ -78,7 +80,7 @@ function ItemCard({product}) {
         }}
                        onMouseEnter={() => setIsFocused(true)}
                        onMouseLeave={() => setIsFocused(false)}
-
+                       onClick={() => navigate(`/product/${product._id}`)}
         >
             <img
 
