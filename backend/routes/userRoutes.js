@@ -1,7 +1,7 @@
 const express = require('express');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
-const { registerUser, loginUser, refreshToken, logoutUser, verifyUserEmail, forgotPassword, resetPassword } = require('../controllers/userController');
+const { registerUser, loginUser, refreshToken, logoutUser, verifyUserEmail, forgotPassword, resetPassword, googleSignIn } = require('../controllers/userController');
 
 /**
  * @swagger
@@ -98,5 +98,7 @@ router.post('/reset-password', resetPassword);
 router.get('/check-admin', protect, (req, res) => {
     res.json({ isAdmin: req.user.isAdmin });
 });
+
+router.post('/google-signin', googleSignIn)
 
 module.exports = router;
