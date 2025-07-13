@@ -1,5 +1,6 @@
 const Product = require('../models/Product');
 const cloudinary = require('../config/cloudinary');
+const { create } = require('../models/User');
 
 // @desc    Create a new product
 // @route   POST /api/products
@@ -67,8 +68,45 @@ const createProduct = async (req, res) => {
 // @access  Public
 const getProducts = async (req, res) => {
     try {
-        const products = await Product.find({});
-        res.status(200).json(products);
+        const { search, minPrice, maxPrice, category, sortBy, sortOrder } = req.query;
+        const filter = {};
+
+        if (search) {
+            filter.name = { $regex: search, $options: 'i' };
+        }
+
+        if (minPrice || maxPrice) {
+            filter.price = {};
+            if (minPrice) filter.price.$gte = Number(minPrice);
+            if (maxPrice) filter.price.$lte = Number(maxPrice);
+        }
+
+        if (category) {
+            filter.category = category;
+        }
+
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit; 
+        
+        let sort = {createdAt: -1}; 
+        if (sortBy) {
+            const order = sortOrder === 'asc' ? 1 : -1;
+            sort = { [sortBy]: order };
+        }
+
+        const total = await Product.countDocuments(filter);
+        const products = await Product.find(filter)
+        .skip(skip)
+        .limit(limit)
+        .sort(sort);
+
+        res.status(200).json({ 
+            products, 
+            page, 
+            totalPages: Math.ceil(total / limit), 
+            total 
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
