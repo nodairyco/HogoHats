@@ -4,11 +4,13 @@ import {productContext} from "../../App.jsx";
 import axios from "axios";
 import {Box, ImageList, ImageListItem, useMediaQuery, useTheme} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import PopUp from "./PopUp.jsx";
 
 function Home() {
-    const cookies = new Cookies(null, {path: '/'})
-    const {products, setProducts} = useContext(productContext)
+    const {setProducts} = useContext(productContext)
+    const [searchParams] = useSearchParams()
+    const displayPopUp = searchParams.has('inl') && searchParams.get('inl') === 'true'
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -26,6 +28,7 @@ function Home() {
 
     return (
         <>
+            <PopUp disp={displayPopUp}/>
             <MapItems/>
         </>
     );
@@ -45,8 +48,8 @@ function MapItems() {
 
     return (
 
-        <Box sx={{maxWidth: 1200, margin: '0 auto', width: '100%'}}>
-            <ImageList cols={cols} gap={16} sx={{p:12}}>
+        <Box sx={{margin: '0 auto', width: '100%'}}>
+            <ImageList cols={cols} gap={16} sx={{p:isXs? 1: 4, width:'100%'}}>
                 {products.map((product) => (
                     <ItemCard product={product}/>
                 ))}
@@ -71,7 +74,7 @@ function ItemCard({product}) {
             borderRadius: 2,
             // backgroundColor: 'red', 
             transition: 'all 0.3s ease',
-            maxWidth: '300px',
+            width:'fit-content',
             '&:hover': {
                 cursor: 'pointer',
                 boxShadow: '0px 4px 35px 0px #A8ACB030',
@@ -92,8 +95,8 @@ function ItemCard({product}) {
                     borderRadius: 8,
                     objectFit: 'cover',
                     aspectRatio: '1/1',
-                    maxHeight: '276px',
-                    maxWidth: '276px',
+                    maxHeight: '350px',
+                    maxWidth: '350px',
                     transition: 'all 0.3s ease',
                     marginBottom: '12px'
                 }}

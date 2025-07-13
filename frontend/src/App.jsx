@@ -20,7 +20,7 @@ function App() {
         <>
             <productContext.Provider value={{products, setProducts}}>
                 <main style={{
-                    display: 'flex', height: '100vh', justifyContent: 'center',
+                    display: 'flex', minHeight: '100vh', justifyContent: 'center',
                     overflowY: 'auto', flexDirection: 'column'
                 }}>
                     <Suspense fallback={<div>loading</div>}>

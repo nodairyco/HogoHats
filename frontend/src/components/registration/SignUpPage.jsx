@@ -115,7 +115,7 @@ function SignUpPage() {
             console.log('Retrieving token returned with error', error.response?.data || error.message)
         }
         
-        navigate('/home')
+        navigate('/home?inl=true')
     }
 
     return (
