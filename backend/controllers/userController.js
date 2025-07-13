@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const sendEmail = require('../utils/sendEmail');
 
 const registerUser = async (req, res) => {
@@ -206,6 +208,53 @@ const refreshToken = async (req, res) => {
     }
 }
 
+const googleSignIn = async (req, res) => {
+    const { idToken } = req.body;
+    if (!idToken) {
+        return res.status(400).json({ message: 'No ID token provided' });
+    }
+    try {
+        const ticket = await googleClient.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const { email, name, sub } = payload;
+
+        let user = await User.findOne({ email });
+        if (!user) {
+            user = await User.create({
+                username: name,
+                email,
+                password: sub, // Google users don't use this password
+                isVerified: true
+            });
+        }
+
+        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+        const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        });
+
+        res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            accessToken
+        });
+    } catch (err) {
+        res.status(401).json({ message: 'Google authentication failed', error: err.message });
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
@@ -213,5 +262,6 @@ module.exports = {
     logoutUser,
     resetPassword,
     forgotPassword,
-    verifyUserEmail
+    verifyUserEmail,
+    googleSignIn
 };
