@@ -6,6 +6,7 @@ import LoginPage from "./components/registration/LoginPage.jsx";
 import AdminPanel from "./components/adminpanel/AdminPanel.jsx"
 import {createContext, Suspense, useState} from "react";
 import ProductDetails from "./components/productpage/ProductDetails.jsx";
+import Test from "./Test.jsx";
 
 export const productContext = createContext()
 
@@ -21,7 +22,7 @@ function App() {
             <productContext.Provider value={{products, setProducts}}>
                 <main style={{
                     display: 'flex', minHeight: '100vh', justifyContent: 'center',
-                    overflowY: 'auto', flexDirection: 'column'
+                    overflowY: 'auto', flexDirection: 'row'
                 }}>
                     <Suspense fallback={<div>loading</div>}>
                         <Routes>
@@ -31,6 +32,7 @@ function App() {
                             <Route path='/signup' element={<SignUpPage/>}/>
                             <Route path='/login' element={<LoginPage/>}/>
                             <Route path='/product/:id' element={<ProductDetails/>}/>
+                            <Route path='test' element={<Test/>}/>
                         </Routes>
                     </Suspense>
                 </main>
