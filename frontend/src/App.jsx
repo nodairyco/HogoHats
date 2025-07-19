@@ -1,30 +1,42 @@
 import SignUpPage from "./components/registration/SignUpPage.jsx";
 import {Routes, Route, Navigate} from "react-router-dom";
-import {Box, Container} from "@mui/material";
-import registrationCss from './components/registration/Registration.module.css'
+import {Box, ButtonGroupButtonContext, Container} from "@mui/material";
 import Home from "./components/home/Home.jsx";
 import LoginPage from "./components/registration/LoginPage.jsx";
+import AdminPanel from "./components/adminpanel/AdminPanel.jsx"
+import {createContext, Suspense, useState} from "react";
+import ProductDetails from "./components/productpage/ProductDetails.jsx";
+import Test from "./Test.jsx";
+
+export const productContext = createContext()
+
 
 function App() {
 
+    const [products, setProducts] = useState([])
+    const [cart, setCart] = useState([])
+
+
     return (
         <>
-            <Container sx={{display: 'flex', height: '100vh', justifyContent: 'center'}}>
-                <Routes>
-                    <Route path="/" element={<Navigate to='/signup'/>}/>
-                    <Route path="/home" element={<Home/>}/>
-                </Routes>
-                <Box className={registrationCss.registrationContainer}>
-                    <div className={registrationCss.formDecorationDiv}/>
-                    <h1 className={registrationCss.formDecorationH1}>
-                        Register
-                    </h1>
-                    <Routes>
-                        <Route path='/signup' element={<SignUpPage/>}/>
-                        <Route path='/login' element={<LoginPage/>}/>
-                    </Routes>
-                </Box>
-            </Container>
+            <productContext.Provider value={{products, setProducts}}>
+                <main style={{
+                    display: 'flex', minHeight: '100vh', justifyContent: 'center',
+                    overflowY: 'auto', flexDirection: 'row'
+                }}>
+                    <Suspense fallback={<div>loading</div>}>
+                        <Routes>
+                            <Route path="/" element={<Navigate to='/signup'/>}/>
+                            <Route path="/home" element={<Home/>}/>
+                            <Route path="/admin" element={<AdminPanel/>}/>
+                            <Route path='/signup' element={<SignUpPage/>}/>
+                            <Route path='/login' element={<LoginPage/>}/>
+                            <Route path='/product/:id' element={<ProductDetails/>}/>
+                            <Route path='test' element={<Test/>}/>
+                        </Routes>
+                    </Suspense>
+                </main>
+            </productContext.Provider>
         </>
     )
 }

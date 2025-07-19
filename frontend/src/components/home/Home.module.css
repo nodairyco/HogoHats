@@ -1,0 +1,10 @@
+.productContainerGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 4rem;
+    width: 100%;
+}
+
+.productImg{
+    transition: all 0.3s ease;
+}
