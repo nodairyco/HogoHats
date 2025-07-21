@@ -1,11 +1,12 @@
-:root{
+:root {
     --bg-color: #28292d;
     --accent-1: #5c342c;
+    --test: hsl(from var(--bg-color) h s calc(l-20));
 }
 
-body, html, #root{
+body, html, #root {
     margin: 0;
-    background-color: var(--bg-color); 
+    background-color: var(--bg-color);
     overflow-x: hidden;
     font-family: 'Raleway', sans-serif;
 }
