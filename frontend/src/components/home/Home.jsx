@@ -1,15 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {productContext} from "../../App.jsx";
+import ProductContext from "../../ProductContext.jsx";
 import axios from "axios";
 import {Box, ImageList, useMediaQuery, useTheme} from "@mui/material";
-import {useSearchParams} from "react-router-dom";
+import {useLocation, useParams, useSearchParams} from "react-router-dom";
 import PopUp from "./subcomponents/PopUp.jsx";
 import ItemCard from "./subcomponents/ItemCard.jsx";
 import HomeTopBar from "./subcomponents/HomeTopBar.jsx";
 import {HomeContext as HomeContext1} from "./HomeContext.jsx";
 
 function Home() {
-    const {setProducts, products} = useContext(productContext)
+    const {setProducts, products} = useContext(ProductContext)
     const [searchParams] = useSearchParams()
     const displayPopUp = searchParams.has('inl') && searchParams.get('inl') === 'true'
     const [filters, setFilters] = useState({
@@ -17,17 +17,21 @@ function Home() {
         sortBy: '',
         sortOrder: '',
         minPrice: 0,
-        maxPrice: 10000000
+        maxPrice: 10000000,
+        category: ''
     })
     const [hasMore, setHasMore] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [totalItems, setTotalItems] = useState(0)
+    const params = useParams()
+    const location = useLocation()
 
     // Retrieve paginated items
     // This code runs on the first render and everytime filters.pageNum is updated
     useEffect(() => {
         const fetchProducts = async () => {
             setIsLoading(true)
+            const category = params.category
             try {
                 const response = await axios.get("http://localhost:5050/api/products",
                     {
@@ -38,7 +42,8 @@ function Home() {
                             sortBy: filters.sortBy,
                             sortOrder: filters.sortOrder,
                             minPrice: filters.minPrice,
-                            maxPrice: filters.maxPrice
+                            maxPrice: filters.maxPrice,
+                            category: location.pathname === '/home'? '' : category
                         }
                     })
                 const productsArr = response.data.products
@@ -97,7 +102,7 @@ export default Home;
 function MapItems() {
     const theme = useTheme()
 
-    const {products} = useContext(productContext)
+    const {products} = useContext(ProductContext)
     const isXs = useMediaQuery(theme.breakpoints.down('sm')); // <600px
     const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md')); // 600–900px
     const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg')); // 900–1200px
