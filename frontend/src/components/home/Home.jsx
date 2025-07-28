@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {productContext} from "../../App.jsx";
+import ProductContext from "../../ProductContext.jsx";
 import axios from "axios";
 import {Box, ImageList, useMediaQuery, useTheme} from "@mui/material";
 import {useLocation, useParams, useSearchParams} from "react-router-dom";
@@ -9,7 +9,7 @@ import HomeTopBar from "./subcomponents/HomeTopBar.jsx";
 import {HomeContext as HomeContext1} from "./HomeContext.jsx";
 
 function Home() {
-    const {setProducts, products} = useContext(productContext)
+    const {setProducts, products} = useContext(ProductContext)
     const [searchParams] = useSearchParams()
     const displayPopUp = searchParams.has('inl') && searchParams.get('inl') === 'true'
     const [filters, setFilters] = useState({
@@ -102,7 +102,7 @@ export default Home;
 function MapItems() {
     const theme = useTheme()
 
-    const {products} = useContext(productContext)
+    const {products} = useContext(ProductContext)
     const isXs = useMediaQuery(theme.breakpoints.down('sm')); // <600px
     const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md')); // 600–900px
     const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg')); // 900–1200px
