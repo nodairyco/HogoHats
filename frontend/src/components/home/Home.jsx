@@ -1,37 +1,38 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ProductContext from "../../ProductContext.jsx";
 import axios from "axios";
-import {Box, ImageList, useMediaQuery, useTheme} from "@mui/material";
-import {useLocation, useParams, useSearchParams} from "react-router-dom";
+import { Box, ImageList, useMediaQuery, useTheme } from "@mui/material";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import PopUp from "./subcomponents/PopUp.jsx";
 import ItemCard from "./subcomponents/ItemCard.jsx";
 import HomeTopBar from "./subcomponents/HomeTopBar.jsx";
-import {HomeContext as HomeContext1} from "./HomeContext.jsx";
 
 function Home() {
-    const {setProducts, products} = useContext(ProductContext)
+    const {
+        products,
+        setProducts,
+        setFilters,
+        hasMore,
+        setHasMore,
+        isLoading,
+        setIsLoading,
+        totalItems,
+        setTotalItems,
+        filters
+    } = useContext(ProductContext)
+    const params = useParams()
     const [searchParams] = useSearchParams()
     const displayPopUp = searchParams.has('inl') && searchParams.get('inl') === 'true'
-    const [filters, setFilters] = useState({
-        pageNum: 1,
-        sortBy: '',
-        sortOrder: '',
-        minPrice: 0,
-        maxPrice: 10000000,
-        category: ''
-    })
-    const [hasMore, setHasMore] = useState(true)
-    const [isLoading, setIsLoading] = useState(false)
-    const [totalItems, setTotalItems] = useState(0)
-    const params = useParams()
-    const location = useLocation()
+    const navigate = useNavigate()
 
-    // Retrieve paginated items
-    // This code runs on the first render and everytime filters.pageNum is updated
     useEffect(() => {
         const fetchProducts = async () => {
+            setFilters(prev => ({ ...prev, pageNum: 1 }))
+            setHasMore(true)
+            setProducts([])
             setIsLoading(true)
             const category = params.category
+            console.log(category)
             try {
                 const response = await axios.get("http://localhost:5050/api/products",
                     {
@@ -43,7 +44,7 @@ function Home() {
                             sortOrder: filters.sortOrder,
                             minPrice: filters.minPrice,
                             maxPrice: filters.maxPrice,
-                            category: location.pathname === '/home'? '' : category
+                            category: navigate.pathname === '/home'? '' : category 
                         }
                     })
                 const productsArr = response.data.products
@@ -63,7 +64,8 @@ function Home() {
         }
 
         fetchProducts()
-    }, [filters.pageNum, filters.sortOrder, filters.sortBy, filters.minPrice, filters.maxPrice]);
+    }, [filters.pageNum, filters.sortOrder, filters.sortBy, filters.minPrice, filters.maxPrice, params.category]);
+
 
     // Update filters.pageNum on every scroll to bottom. 
     useEffect(() => {
@@ -74,7 +76,7 @@ function Home() {
 
             if (!isLoading && hasMore && scrollTop + clientHeight >= scrollHeight - 200) {
                 // Close to bottom
-                setFilters(prev => ({...prev, pageNum: prev.pageNum + 1}));
+                setFilters(prev => ({ ...prev, pageNum: prev.pageNum + 1 }));
             }
         };
 
@@ -83,18 +85,12 @@ function Home() {
     }, [isLoading, hasMore]);
 
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column', mt: 2}}>
-
-            <HomeContext1 value={{totalItems, setTotalItems, setFilters, filters}}>
-                <>
-                    <HomeTopBar/>
-                    <PopUp disp={displayPopUp}/>
-                    <MapItems/>
-                </>
-            </HomeContext1>
+        <Box sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}>
+            <HomeTopBar />
+            <PopUp disp={displayPopUp} />
+            <MapItems />
         </Box>
-    )
-        ;
+    );
 }
 
 export default Home;
@@ -102,7 +98,7 @@ export default Home;
 function MapItems() {
     const theme = useTheme()
 
-    const {products} = useContext(ProductContext)
+    const { products } = useContext(ProductContext)
     const isXs = useMediaQuery(theme.breakpoints.down('sm')); // <600px
     const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md')); // 600–900px
     const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg')); // 900–1200px
@@ -111,10 +107,10 @@ function MapItems() {
 
     return (
 
-        <Box sx={{margin: '0 auto', width: '100%'}}>
-            <ImageList cols={cols} gap={16} sx={{p: isXs ? 1 : 4, width: '100%'}}>
+        <Box sx={{ margin: '0 auto', width: '100%' }}>
+            <ImageList cols={cols} gap={16} sx={{ p: isXs ? 1 : 4, width: '100%', overscrollBehavior: 'none' }}>
                 {products.map((product) => (
-                    <ItemCard product={product}/>
+                    <ItemCard product={product} />
                 ))}
             </ImageList>
         </Box>

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
@@ -70,7 +69,7 @@ export const CartProvider = ({ children }) => {
     }
 
     const updateQuantity = (productId, size = 's', quantity) => {
-        if (quantity < 0) {
+        if (quantity <= 0) {
             removeFromCart(productId, size)
             return;
         }
@@ -85,30 +84,43 @@ export const CartProvider = ({ children }) => {
     }
 
     const getCartTotal = () => {
-        return cart.reduce((total, item) => total + (item.quantity * item.price), 0)
+        return !cart ? 0 : cart.reduce((total, item) => total + (item.quantity * item.price), 0).toFixed(2)
     }
 
     const getCartItemCount = () => {
-        return cart.reduce((count, item) => count + item.quantity, 0)
+        return !cart ? 0 : cart.reduce((count, item) => count + item.quantity, 0)
     }
 
-    const handleSizeChange = async (item, newSize) => {
-        setCart(prev => {
+    const handleSizeChange = (item, newSize) => {
+        if (item.chosenSize === newSize) return;
 
-            prev = prev.map(prevItem => {
-                if (prevItem.product === item.product && prevItem.size === newSize) {
-                    return { ...prevItem, product: prevItem.product, quantity: item.quantity + prevItem.quantity }
+        const existingItemIndex = cart.findIndex(
+            cartItem => cartItem.product === item.product && cartItem.size === newSize
+        );
+
+        if (existingItemIndex !== -1) {
+            const updatedItems = cart.map((cartItem, index) => {
+                if (index === existingItemIndex) {
+                    return { ...cartItem, quantity: cartItem.quantity + item.quantity };
                 }
+                if (cartItem.product === item.product && cartItem.size === item.size) {
+                    return null;
+                }
+                return cartItem;
+            }).filter(Boolean);
 
-                return prevItem;
-            })
-
-            return prev.filter(prevItem => {
-                console.log(prevItem.product !== item.product || prevItem.size !== item.size)
-                return prevItem.product !== item.product || prevItem.size !== item.size
-            })
-        })
+            setCart(updatedItems);
+        } else {
+            const updatedItems = cart.map((cartItem) =>
+                cartItem.product === item.product && cartItem.size === item.size
+                    ? { ...cartItem, size: newSize }
+                    : cartItem
+            );
+            setCart(updatedItems);
+        }
     }
+
+    const clearCart = () => setCart([])
 
     return (
         <CartContext.Provider value={{
@@ -118,7 +130,8 @@ export const CartProvider = ({ children }) => {
             updateQuantity,
             getCartTotal,
             getCartItemCount,
-            handleSizeChange
+            handleSizeChange,
+            clearCart
         }}>
             {children}
         </CartContext.Provider>
