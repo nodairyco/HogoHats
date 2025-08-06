@@ -1,13 +1,12 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Box, Button, Slider} from "@mui/material";
 import Typography from "@mui/material/Typography";
-
-import {HomeContext} from "../HomeContext.jsx";
 import TextField from "@mui/material/TextField";
+import ProductContext from '../../../ProductContext.jsx';
 
 
 function HomeTopBar() {
-    const {totalItems, setFilters, filters} = useContext(HomeContext)
+    const {totalItems, setFilters, filters} = useContext(ProductContext)
     const sortStuff = [
         "Name, A-Z", "Name, Z-A", "Price, Low to High", "Price, High to Low"
     ];
@@ -84,7 +83,7 @@ function HomeTopBar() {
     }
 
     return (
-        <Box sx={{mx: 'auto', display: 'flex', justifyContent: 'space-between', width: '80%'}}>
+        <Box sx={{mx: 'auto', display: 'flex', justifyContent: 'row-reverse',}} fullWidth={true}>
             <Box id='totalItems'>
                 <Typography variant='h4' sx={{
                     fontWeight: 600
