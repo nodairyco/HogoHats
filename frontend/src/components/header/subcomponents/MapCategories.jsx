@@ -1,31 +1,97 @@
-import { Box, Link } from "@mui/material"
-import { useLocation } from "react-router-dom"
+import { Box, Typography } from "@mui/material"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { HeaderButton } from "../StyledHeaderComponents";
+import { useState } from "react";
 
-const MapCategories = () => {
+const MapCategories = ({ isBelowMd, theme }) => {
     const categories = ['women', 'men', 'kids', 'premium']
+    const params = useParams()
+    const navigate = useNavigate()
+    const [categoriesDropdown, setCategoriesDropdown] = useState(false)
     const location = useLocation()
-    const getCategoryFromUrl = () => {
-        let path = location.pathname
-        return path.slice(path.lastIndexOf('/') + 1, path.includes('?') ? path.indexOf('?') : path.length)
+    const category = location.pathname.startsWith('/products') ? location.pathname.split('/')[2] : null;
+
+    const getIconFromCategory = (category) => {
+        switch (category) {
+            case "women": return ["fa fa-female", "Women"];
+            case "men": return ["fa fa-male", "Men"];
+            case "kids": return ["fa fa-child", "Kids"];
+            case "premium": return ["fa fa-dollar-sign", "Premium"];
+            default: return ["fa fa-list", "All"];
+        }
     }
 
-    return <Box sx={{ display: 'flex', gap: 2 }}>
-        {categories.map((category, index) => {
-            return <Link href={`/home/${category}`} key={index} sx={{
-                textDecoration: 'none',
-                cursor: 'pointer',
-                color: 'hsl(from var(--accent-1) h s calc(l*1.25))',
-                fontSize: '18px',
-                '&:hover': {
-                    color: 'hsl(from var(--accent-1) calc(h*2) calc(s*2) calc(l*3))'
-                },
-                borderBottom: getCategoryFromUrl() === category ?
-                    '1px solid hsl(from var(--accent-1) calc(h*2) calc(s*2) calc(l*3))' : ''
-            }}>
-                {category.toLocaleUpperCase(0)}
-            </Link>
-        })}
-    </Box>
+    return (
+        <Box sx={{
+            position: 'relative'
+        }}>
+            < HeaderButton id="header-categories" onClick={() => setCategoriesDropdown(prev => !prev)}>
+                <Box component='i' className={getIconFromCategory(category)[0]} sx={{
+                    fontSize: '30px',
+                    color: 'primary.txtColor'
+                }} />
+                {
+                    !isBelowMd &&
+                    <Typography variant='span' color="primary.txtColor" fontWeight='550'>
+                        {getIconFromCategory(category)[1]}
+                    </Typography>
+                }
+
+
+            </HeaderButton>
+            {
+                categoriesDropdown &&
+                <Box id='header-categories-dropdown' sx={{
+                    position: 'absolute',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: theme.palette.primary.txtColor,
+                    alignItems: 'center',
+                    gap: theme.spacing(1),
+                    cursor: 'pointer',
+                    minHeight: '50px',
+                    background: theme.palette.primary.bgColor,
+                    transition: 'height 0.3s ease',
+                    height: categoriesDropdown ? 'fit-content' : '0',
+                }}>
+                    {
+                        categories.map((innerCategory) => {
+                            return (
+                                <>
+                                    <HeaderButton component='i'
+                                        key={innerCategory}
+                                        className={getIconFromCategory(innerCategory)[0]}
+                                        onClick={() => {
+                                            setCategoriesDropdown(false)
+                                            navigate(`/products/${innerCategory}`)
+                                        }}
+                                        sx={{
+                                            fontSize: '30px',
+                                            color: 'primary.txtColor',
+                                            border: 'none',
+                                            width: '100%',
+                                            m: 0,
+                                            backgroundColor: innerCategory === category &&
+                                                `hsl(from ${theme.palette.primary.submain} h s calc(l*0.9))`
+                                        }}>
+                                        {
+                                            !isBelowMd &&
+                                            <Typography variant='span' color="primary.txtColor" fontWeight='550' fontSize='1rem'>
+                                                {getIconFromCategory(innerCategory)[1]}
+                                            </Typography>
+                                        }
+                                    </HeaderButton>
+
+                                </>
+                            )
+                        })
+                    }
+                </Box>
+            }
+        </Box >
+    )
 };
 
 export default MapCategories;

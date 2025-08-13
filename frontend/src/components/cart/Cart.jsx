@@ -1,18 +1,25 @@
 import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import useCart from '../../CartContext.jsx';
 import { RenderCartItem } from './submodules/RenderCartItem.jsx';
-import { Button, Box, Typography, Container, useTheme } from '@mui/material';
+import { Button, Box, Typography, Container } from '@mui/material';
 import axios from 'axios';
 import ProductContext from '../../ProductContext.jsx';
+import CartInfo from './submodules/CartInfo.jsx';
+import CartHeader from './submodules/CartHeader.jsx';
+import { useSearchParams } from 'react-router-dom';
+import Shipping from './submodules/Shipping.jsx';
+import { CartSubCompProvider, useCartSubComp } from './CartSubCompContext.jsx';
 
-const Cart = ({ footerRef }) => {
+const CartContent = ({ footerRef }) => {
+    const { currentStep } = useCartSubComp();
+    
     const {
         getCart,
         getCartTotal,
         getCartItemCount,
         clearCart
     } = useCart()
+
 
     const { products, setProducts } = useContext(ProductContext)
 
@@ -31,33 +38,39 @@ const Cart = ({ footerRef }) => {
         }
     }
 
+    
+
     useEffect(() => {
         fetchProducts()
     }, [])
 
-
+    const renderCurrentStep = () => {
+        switch (currentStep) {
+            case 'cart':
+                return (
+                    <Box sx={{ flex: 2.5, width: '100%', display: 'flex', flexDirection: 'column', gap: 3 }} id='cart-items'>
+                        {
+                            getCart()?.length > 0 ?
+                                getCart()?.map((item) => {
+                                    return (
+                                        <RenderCartItem product={item} />
+                                    )
+                                }) :
+                                <Typography variant='h6'>
+                                    Empty Cart
+                                </Typography>
+                        }
+                    </Box>
+                );
+            case 'shipping':
+                return (<Shipping />)
+        }
+    }
 
 
     return (
         <Container maxWidth="lg" sx={{ mx: 'auto', py: 2 }} id='cart-container'>
-            <Box id='cart-header' sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant='h4' id='cart-info'>
-                    CART {' '}
-                    <Typography variant='span' sx={{
-                        fontSize: 24
-                    }}>
-                        {getCartItemCount()} items
-                    </Typography>
-                </Typography>
-                <Button id='empty-cart-btn' variant='text' sx={{
-                    color: 'primary.submain',
-                    display: 'flex',
-                    gap: 1
-                }} onClick={() => clearCart()}>
-                    <i className="fa-solid fa-trash"></i>
-                    Empty Cart
-                </Button>
-            </Box>
+            <CartHeader getCartItemCount={getCartItemCount} clearCart={clearCart} stepName={currentStep.toUpperCase()} />
 
             <Box component='div' sx={{
                 width: '100%',
@@ -66,129 +79,30 @@ const Cart = ({ footerRef }) => {
                 my: 3
             }} />
 
+
             <Container id='cart-items-info-container' sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 gap: 4,
                 padding: '0 !important'
             }}>
-                <Box sx={{ flex: 2.5, width: '100%', display: 'flex', flexDirection: 'column', gap: 3 }} id='cart-items'>
-                    {
-                        getCart()?.length > 0 ?
-                            getCart()?.map((item) => {
-                                return (
-                                    <RenderCartItem product={item} />
-                                )
-                            }) :
-                            <Typography variant='h6'>
-                                Empty Cart
-                            </Typography>
-                    }
-                </Box>
-                {CartInfo(getCartTotal, footerRef)}
+
+                {renderCurrentStep()}
+                <CartInfo getCartTotal={getCartTotal} footerRef={footerRef} />
             </Container>
-        </Container >
+        </Container>
+    );
+};
+
+const Cart = ({ footerRef }) => {
+    return (
+        <CartSubCompProvider>
+            <CartContent footerRef={footerRef} />
+        </CartSubCompProvider>
     );
 };
 
 export default Cart;
 
-function CartInfo(getCartTotal, footerRef) {
-    const theme = useTheme()
 
-    const navigate = useNavigate()
-
-    const txtColor = `hsl(from ${theme.palette.primary.submain} h s calc(l*0.3))`
-
-    return (
-        <Box sx={{
-            width: '100%',
-            flex: 1,
-            background: 'hsl(from var(--bg-color) h s calc(l * 1.5))',
-            borderRadius: '14px',
-            p: 2,
-            height: 'fit-content',
-            [theme.breakpoints.down('md')]: {
-                position: 'fixed',
-                bottom: footerRef.current ? footerRef.current.offsetHeight : 0,
-                width: '100%',
-                px: 'auto',
-                left: 0,
-                borderBottomRightRadius: '0px',
-                borderBottomLeftRadius: '0px'
-            }
-        }} id='cart-info'>
-            <Box id='cart-total' sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-            }}>
-                <Typography sx={{
-                    fontSize: '18px',
-                    px: 2,
-                    color: txtColor
-                }}>
-                    Subtotal:
-                </Typography>
-                <Typography id='cart-total' sx={{
-                    fontSize: '18x',
-                    px: 2,
-                    color: txtColor
-                }}>
-                    ₾{getCartTotal()}
-                </Typography>
-            </Box>
-            <Box id='shipping-total' sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-            }}>
-                <Typography sx={{
-                    fontSize: '18px',
-                    px: 2,
-                    color: txtColor
-                }}>
-                    Shipping:
-                </Typography>
-                <Typography id='cart-total' sx={{
-                    fontSize: '18x',
-                    px: 2,
-                    color: txtColor
-                }}>
-                    ₾0.00
-                </Typography>
-            </Box>
-            <Box component='div' sx={{
-                width: '100%',
-                borderBottom: `1px solid ${txtColor}`,
-                py: 1.5
-            }} />
-            <Box id='shipping-total' sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-            }}>
-                <Typography sx={{
-                    fontSize: '20px',
-                    color: txtColor
-                }}>
-                    Total:
-                </Typography>
-                <Typography id='cart-total' sx={{
-                    fontSize: '20px',
-                    color: txtColor
-                }}>
-                    ₾{getCartTotal()}
-                </Typography>
-            </Box>
-            <Button id='continue-button' sx={{
-                width: '100%', mt: 2,
-                boxShadow:'none',
-                borderRadius:'20px'
-            }} variant='contained' onClick={() => { navigate('/checkout') }}>
-                Go to Checkout
-            </Button>
-        </Box>
-    );
-}
 

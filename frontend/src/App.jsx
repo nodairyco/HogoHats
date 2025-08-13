@@ -63,7 +63,7 @@ function App() {
                                     <Route path="/"
                                         element={<Navigate to={cookies.get('accessToken') ? '/home' : '/signup'} />} />
                                     <Route path="/home" element={<Home />} />
-                                    <Route path="/home/:category" element={<Home />} />
+                                    <Route path="/products/:category" element={<Home />} />
                                     <Route path="/admin" element={<AdminPanel />} />
                                     <Route path='/signup' element={<SignUpPage />} />
                                     <Route path='/login' element={<LoginPage />} />
