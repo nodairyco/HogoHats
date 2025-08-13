@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import Cookies from "universal-cookie"
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Typography } from '@mui/material'
+import { HeaderButton } from "../StyledHeaderComponents"
 
-export default function GetSelf() {
+export default function GetSelf({ isBelowMd }) {
     const cookies = new Cookies(null, { path: '/' })
     const accessToken = cookies.get("accessToken")
     const [editSelfDropdown, setEditSelfDropdown] = useState(false)
     const selfDropdownRef = useRef(null)
-    const theme = useTheme()
     // little later
     // const [username, setUsername] = useState('')
 
@@ -46,34 +46,23 @@ export default function GetSelf() {
         )
     }
 
-    return <Box sx={{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'row',
-        borderRadius: '8px',
-        border: '2px solid',
-        borderColor: 'primary.txtColor',
-        px: 1,
-        py: 0.5,
-        alignItems: 'center',
-        gap: 1,
-        cursor: 'pointer',
-        minHeight: '50px',
-        '&:hover': {
-            backgroundColor: `hsl(from ${theme.palette.primary.submain} h s calc(l*0.9))`,
-            transition: 'background-color ease 0.2s'
-        }
-    }} onClick={() => setEditSelfDropdown(prev => !prev)} ref={selfDropdownRef}>
-        <Box component='i' className="lni lni-user-4" sx={{
+    return <HeaderButton onClick={() => setEditSelfDropdown(prev => !prev)} ref={selfDropdownRef}
+        id="header-self"
+    >
+        <Box component='i' className="lni lni-user-4" id="header-btn-i" sx={{
             color: 'primary.txtColor',
             fontSize: '30px'
         }} />
-        <Typography variant='span' color="primary.txtColor" fontWeight='550'>
-            username
-        </Typography>
+        {
+            !isBelowMd &&
+            <Typography variant='span' color="primary.txtColor" fontWeight='550'>
+                username
+            </Typography>
+        }
+
         {
             editSelfDropdown &&
             <EditSelf />
         }
-    </Box>
+    </HeaderButton>
 }

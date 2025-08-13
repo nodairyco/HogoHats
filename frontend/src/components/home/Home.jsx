@@ -1,22 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import ProductContext from "../../ProductContext.jsx";
 import axios from "axios";
 import { Box, ImageList, useMediaQuery, useTheme } from "@mui/material";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import PopUp from "./subcomponents/PopUp.jsx";
 import ItemCard from "./subcomponents/ItemCard.jsx";
 import HomeTopBar from "./subcomponents/HomeTopBar.jsx";
 
 function Home() {
     const {
-        products,
         setProducts,
         setFilters,
         hasMore,
         setHasMore,
         isLoading,
         setIsLoading,
-        totalItems,
         setTotalItems,
         filters
     } = useContext(ProductContext)
@@ -44,7 +42,7 @@ function Home() {
                             sortOrder: filters.sortOrder,
                             minPrice: filters.minPrice,
                             maxPrice: filters.maxPrice,
-                            category: navigate.pathname === '/home'? '' : category 
+                            category: navigate.pathname === '/home' ? '' : category
                         }
                     })
                 const productsArr = response.data.products

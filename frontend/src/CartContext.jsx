@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
 
-const useCart = () => {
+function useCart(){
     const context = useContext(CartContext);
 
     return context;
@@ -27,7 +27,6 @@ export const CartProvider = ({ children }) => {
     useEffect(() => {
         if (cart !== null) {
             localStorage.setItem('cart', JSON.stringify(cart))
-            console.log(cart)
         }
     }, [cart])
 

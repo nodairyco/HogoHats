@@ -1,38 +1,29 @@
-import { Box, Typography, useTheme } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import useCart from "../../../CartContext";
+import { useNavigate } from "react-router-dom";
+import { HeaderButton } from "../StyledHeaderComponents";
 
-const GetCart = () => {
-    const theme = useTheme()
+const GetCart = ({ isBelowMd }) => {
     const { getCartItemCount } = useCart()
+    const navigate = useNavigate()
 
     return (
-        <Box id='topbar-cart-container' sx={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'row',
-            borderRadius: '8px',
-            border: '2px solid',
-            borderColor: 'primary.txtColor',
-            px: 1,
-            py: 0.5,
-            alignItems: 'center',
-            gap: 1,
-            cursor: 'pointer',
-            '&:hover': {
-                backgroundColor: `hsl(from ${theme.palette.primary.submain} h s calc(l*0.9))`,
-                transition:'background-color ease 0.2s'
-            }
+        <HeaderButton id='topbar-cart-container' onClick={() => {
+            navigate('/cart')
         }}>
             <Box component='i' className="lni lni-cart-1" sx={{
                 color: 'primary.txtColor',
                 fontSize: '30px'
-            }} />
-            <Typography color="primary.txtColor" sx={{
-                fontSize: '25px',
-                fontWeight: 550
-            }}>
-                Cart
-            </Typography>
+            }} id='header-btn-i'/>
+            {
+                !isBelowMd &&
+                <Typography color="primary.txtColor" sx={{
+                    fontSize: '25px',
+                    fontWeight: 550
+                }}>
+                    Cart
+                </Typography>
+            }
             {
                 getCartItemCount() > 0 &&
                 <Box sx={{
@@ -52,7 +43,7 @@ const GetCart = () => {
                     {getCartItemCount()}
                 </Box>
             }
-        </Box>
+        </HeaderButton>
     )
 }
 

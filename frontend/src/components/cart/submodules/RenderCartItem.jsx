@@ -5,11 +5,11 @@ import ProductContext from '../../../ProductContext';
 import { useNavigate } from 'react-router-dom';
 
 export function RenderCartItem({ product }) {
-    const {updateQuantity, getCart, removeFromCart } = useCart()
+    const { updateQuantity, getCart, removeFromCart } = useCart()
     const { products } = useContext(ProductContext)
     const navigate = useNavigate()
 
-    
+
     // eslint-disable-next-line no-unused-vars
     const totalItemQuantityIncart = getCart()?.reduce((count, item) => {
         if (item.product === product.product && item.size !== product.size) {
@@ -69,8 +69,8 @@ export function RenderCartItem({ product }) {
                     sx={{
                         height: '100%',
                         borderRadius: '10px',
-                        aspectRatio:'1/1',
-                        objectFit:'cover'
+                        aspectRatio: '1/1',
+                        objectFit: 'cover'
                     }}
                 />
 
@@ -93,8 +93,8 @@ export function RenderCartItem({ product }) {
                 alignSelf: 'center',
                 ml: 'auto',
                 display: 'flex',
-                gap: {md:3, xs:1},
-                flexDirection: { md: 'row',  xs:'column-reverse'},
+                gap: { md: 2, xs: 1 },
+                flexDirection: { md: 'row', xs: 'column-reverse' },
                 alignItems: 'center'
             }}>
                 <Box id='quantity-controls' sx={{
@@ -105,7 +105,7 @@ export function RenderCartItem({ product }) {
                     backgroundColor: theme.palette.primary.main,
                     borderRadius: 5,
                     px: 1,
-                    py: {md:'3px', xs:'1px'} 
+                    py: { md: '3px', xs: '1px' }
                 }}>
                     <QuantityButton onClick={() => {
                         updateQuantity(product.product, product.size, product.quantity + 1)
@@ -130,9 +130,9 @@ export function RenderCartItem({ product }) {
                     height: '40px',
                     minWidth: 'auto'
                 }} onClick={() => removeFromCart(product.product, product.size)}>
-                    <i className="fa-solid fa-trash" style={{
-                        fontSize: '18px'
-                    }}></i>
+                    <Box className="lni lni-trash-3" sx={{
+                        fontSize: '24px',
+                    }} />
                 </Button>
             </Box>
         </Box >
