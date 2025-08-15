@@ -16,7 +16,7 @@ const orderRoutes = require('./routes/orderRoutes');
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: '/*',
   credentials: true,
 }));
 
