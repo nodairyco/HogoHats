@@ -96,7 +96,7 @@ export default function Shipping() {
                     }}
                 />
 
-                <FormControl required fullWidth variant="outlined" disabled={!shippingData.country} error={!!errors.city}>
+                <FormControl required fullWidth variant="outlined" error={!!errors.city}>
                     <InputLabel sx={{ '&.Mui-error': { color: 'error.main' } }}>City</InputLabel>
                     <Select
                         name="city"
