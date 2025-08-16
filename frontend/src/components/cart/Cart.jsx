@@ -21,12 +21,12 @@ const CartContent = ({ footerRef }) => {
     } = useCart()
 
 
-    const { products, setProducts } = useContext(ProductContext)
+    const { products, setProducts, backend } = useContext(ProductContext)
 
     const fetchProducts = async () => {
         if (!products || products.length === 0) {
             try {
-                const response = await axios.get('http://localhost:5050/api/products', {
+                const response = await axios.get(`${backend}/api/products`, {
                     withCredentials: true
                 });
                 const data = response.data.products || response.data;

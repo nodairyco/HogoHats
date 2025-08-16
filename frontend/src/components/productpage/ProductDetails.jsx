@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, Button, } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import useCart from '../../CartContext';
+import ProductContext from '../../ProductContext';
 
 function ProductDetails() {
     const params = useParams()
@@ -14,6 +15,7 @@ function ProductDetails() {
     const inputRef = useRef(null)
     const sizeList = ['s', 'm', 'l']
     const { addToCart } = useCart()
+    const { backend } = useContext(ProductContext)
 
     const handleAddToCart = () => {
         if (!chosenSize) {
@@ -28,7 +30,11 @@ function ProductDetails() {
         const fetchProduct = async () => {
             try {
                 const response =
-                    await axios.get(`http://localhost:5050/api/products/${params.id}`, { withCredentials: true })
+                    await axios.get(`${backend}/api/products/${params.id}`, {
+                        withCredentials: true, headers: {
+                            Authorization: 'Bearer SvQf1kk5MFTPMON0jxkN3DMn'
+                        }
+                    })
                 const product = response.data
                 setCurrentProduct(product)
                 setCurrentlyChosenPicture(product.images[0].url)

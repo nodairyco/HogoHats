@@ -25,10 +25,18 @@ export default function GetSelf({ isBelowMd }) {
     }, [])
 
     if (!accessToken) {
-        return <Link style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 1 }} href='/login'>
-            <img width='40px' src='/right-to-bracket-solid.svg' alt='login' />
-            <Typography variant='span'>Login</Typography>
-        </Link>
+        return <HeaderButton style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 1 }} component='a'href='/login'>
+            <Box component='i' className="lni lni-enter" id="header-btn-i" sx={{
+                color: 'primary.txtColor',
+                fontSize: '30px'
+            }} />
+            {
+                !isBelowMd &&
+                <Typography variant='span' color="primary.txtColor" fontWeight='550'>
+                    Log In 
+                </Typography>
+            }
+        </HeaderButton>
     }
 
     // ill add content here later

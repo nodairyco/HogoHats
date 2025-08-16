@@ -1,16 +1,18 @@
-import React, {useState} from 'react';
+import React, { useContext, useState } from 'react';
 import RegistrationForm from "./subcomponents/RegistrationForm.jsx";
-import {Box, Button} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import css from './Registration.module.css';
 import Typography from "@mui/material/Typography";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import ProductContext from '../../ProductContext.jsx';
 
 function SignUpPage() {
-    
+
     const cookies = new Cookies(null, { path: '/' })
     const navigate = useNavigate()
+    const { backend } = useContext(ProductContext)
 
     const [errors, setErrors] = useState({
         username: '',
@@ -85,7 +87,7 @@ function SignUpPage() {
     const signUp = async () => {
         let err = ''
         try {
-            const response = await axios.post("http://localhost:5050/api/users/register", form, {
+            const response = await axios.post(`${backend}/api/users/register`, form, {
                 withCredentials: true
             })
 
@@ -94,27 +96,27 @@ function SignUpPage() {
             err = error.response?.data.message
             console.error('Error posting data', error.response?.data || error.message)
         }
-        
+
         setErrors(prevState => {
-            return {...prevState, requestError: err}
+            return { ...prevState, requestError: err }
         })
-        
+
         if (err) {
             return
         }
 
         try {
-            const response = await axios.post("http://localhost:5050/api/users/login", {
+            const response = await axios.post(`${backend}/api/users/login`, {
                 email: form.email,
                 password: form.password
-            }, {withCredentials: true})
+            }, { withCredentials: true })
 
             const accessToken = response.data.accessToken
             cookies.set('accessToken', accessToken)
         } catch (error) {
             console.log('Retrieving token returned with error', error.response?.data || error.message)
         }
-        
+
         navigate('/home?inl=true')
     }
 
@@ -124,7 +126,7 @@ function SignUpPage() {
                 Sign Up
             </h1>
             <form onSubmit={handleSignUp} className={css.form}>
-                <RegistrationForm form={form} setForm={setForm} errors={errors}/>
+                <RegistrationForm form={form} setForm={setForm} errors={errors} />
                 <Button variant='contained' fullWidth type='submit'>
                     Sign Up
                 </Button>

@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import RegistrationForm from "./subcomponents/RegistrationForm.jsx";
-import {Box, Button} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import css from './Registration.module.css'
 import axios from "axios";
 import Cookies from "universal-cookie";
+import ProductContext from '../../ProductContext.jsx';
 
 function LoginPage() {
-    const cookies = new Cookies(null, {path: '/'})
+    const cookies = new Cookies(null, { path: '/' })
     const navigate = useNavigate()
+    const { backend } = useContext(ProductContext)
     const [form, setForm] = useState({
         email: "",
         password: ""
@@ -68,7 +70,7 @@ function LoginPage() {
 
         try {
             const response =
-                await axios.post("http://localhost:5050/api/users/login", form, {withCredentials: true})
+                await axios.post(`${backend}/api/users/login`, form, { withCredentials: true })
             const accessToken = response.data.accessToken
             cookies.set('accessToken', accessToken)
         } catch (error) {
@@ -76,9 +78,9 @@ function LoginPage() {
             console.log('Retrieving token returned with error', error.response?.data || error.message)
         }
         setErrors(prevState => {
-            return {...prevState, requestError: err}
+            return { ...prevState, requestError: err }
         })
-        
+
         if (err)
             return
         navigate('/home')
@@ -90,14 +92,14 @@ function LoginPage() {
                 Log In
             </h1>
             <form onSubmit={handleLogin} className={css.form}>
-                <RegistrationForm form={form} setForm={setForm} errors={errors}/>
+                <RegistrationForm form={form} setForm={setForm} errors={errors} />
                 <Button variant='contained' fullWidth type='submit'>
                     Log In
                 </Button>
             </form>
             <Box className={css.linkContainer}>
                 <Typography variant='p' color='primary.submain'>
-                    Don't have an account? 
+                    Don't have an account?
                 </Typography>
                 <Link to='/signup' className={css.oppositeLink}>
                     Sign up

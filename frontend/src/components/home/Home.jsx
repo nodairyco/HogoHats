@@ -16,7 +16,8 @@ function Home() {
         isLoading,
         setIsLoading,
         setTotalItems,
-        filters
+        filters,
+        backend
     } = useContext(ProductContext)
     const params = useParams()
     const [searchParams] = useSearchParams()
@@ -32,7 +33,7 @@ function Home() {
             const category = params.category
             console.log(category)
             try {
-                const response = await axios.get("http://localhost:5050/api/products",
+                const response = await axios.get(`${backend}/api/products`,
                     {
                         withCredentials: true,
                         params: {
@@ -43,6 +44,9 @@ function Home() {
                             minPrice: filters.minPrice,
                             maxPrice: filters.maxPrice,
                             category: navigate.pathname === '/home' ? '' : category
+                        },
+                        headers: {
+                            Authorization: 'Bearer SvQf1kk5MFTPMON0jxkN3DMn'
                         }
                     })
                 const productsArr = response.data.products

@@ -28,6 +28,7 @@ function App() {
     const [hasMore, setHasMore] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [totalItems, setTotalItems] = useState(0)
+    const backend = import.meta.env.VITE_BACKEND || "http://localhost:5050"
 
     const footerRef = useRef()
 
@@ -44,7 +45,8 @@ function App() {
                 setIsLoading,
                 totalItems,
                 setTotalItems,
-                filters
+                filters,
+                backend
             }}>
                 <CartProvider>
                     <Box sx={{}}>
