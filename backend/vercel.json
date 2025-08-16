@@ -9,16 +9,27 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server.js",
-      "methods": ["POST", "PUT", "DELETE", "PATCH", "OPTIONS", "GET"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*"
-      }
+      "dest": "server.js"
     }
   ],
-  "functions": {
-    "server.js": {
-      "maxDuration": 10
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://nodairyco.github.io/"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS, PUT, DELETE"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        },
+        { "key": "Access-Control-Allow-Credentials", "value": "true" }
+      ]
     }
-  }
+  ]
 }
