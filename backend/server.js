@@ -16,7 +16,7 @@ const orderRoutes = require('./routes/orderRoutes');
 
 // Middleware
 app.use(cors({
-  origin: true,
+  origin: "*",
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-type', 'Authorization', 'Cookie']
