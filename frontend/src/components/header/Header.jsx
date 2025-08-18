@@ -43,7 +43,7 @@ function Header() {
                     <Link id='logoContainer'
                         style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', textDecoration: 'none' }}
                         href='/'>
-                        <Box component='img' alt='logo' src='/HogoHats/hogo_logo.jpg' sx={{
+                        <Box component='img' alt='logo' src='hogo_logo.jpg' sx={{
                             height: '80px',
                             aspectRatio: '1/1'
                         }} />
