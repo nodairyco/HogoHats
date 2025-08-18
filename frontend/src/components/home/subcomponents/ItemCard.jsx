@@ -36,7 +36,7 @@ export default function ItemCard({ product }) {
         loading="lazy"
         sx={{
           width: "100%",
-          borderRadius: 8,
+          borderRadius: 2,
           objectFit: "cover",
           aspectRatio: "1/1",
           transition: "all 0.3s ease",

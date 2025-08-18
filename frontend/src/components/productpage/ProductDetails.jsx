@@ -15,8 +15,7 @@ function ProductDetails() {
   const inputRef = useRef(null);
   const sizeList = ["s", "m", "l"];
   const { addToCart } = useCart();
-  const { backend } = useContext(ProductContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const { backend, isLoading, setIsLoading } = useContext(ProductContext);
   const theme = useTheme();
   const isBelowMd = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -71,6 +70,7 @@ function ProductDetails() {
         gap: { xs: 0, md: 4 },
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "center",
+        overflow: "hidden",
       }}
     >
       <Box
@@ -91,7 +91,12 @@ function ProductDetails() {
           <Typography
             id="product-name"
             variant="p"
-            sx={{ fontSize: "30px", fontWeight: "600" }}
+            sx={{
+              fontSize: "30px",
+              fontWeight: "600",
+              pb: "10px",
+              mx: { xs: 2, md: 0 },
+            }}
           >
             {currentProduct.name}
           </Typography>
@@ -158,6 +163,15 @@ const MainImageContainer = ({ currentlyChosenPicture }) => {
     setOffset({ x, y });
   };
 
+  const handleTouchMove = (event) => {
+    if (!ref.current || !event.touches[0]) return;
+    const rect = ref.current.getBoundingClientRect();
+    const touch = event.touches[0];
+    const x = ((touch.clientX - rect.left) * 100) / rect.width;
+    const y = ((touch.clientY - rect.top) * 100) / rect.height;
+    setOffset({ x, y });
+  };
+
   return (
     <Box
       /*className={css.mainImageContainer}*/ ref={ref}
@@ -177,12 +191,17 @@ const MainImageContainer = ({ currentlyChosenPicture }) => {
           backgroundRepeat: "no-repeat",
           borderRadius: "8px",
           cursor: "zoom-in",
+          mx: { xs: 2, md: 0 },
+          touchAction: "none",
         },
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onMouseMove={(event) => handleHover(event)}
       onClick={() => handleZoom()}
+      onTouchMove={handleTouchMove}
+      onTouchStart={() => setHovered(true)}
+      onTouchEnd={() => setHovered(false)}
     >
       <Box
         component="img"
@@ -190,8 +209,9 @@ const MainImageContainer = ({ currentlyChosenPicture }) => {
         src={currentlyChosenPicture}
         sx={{
           borderRadius: "8px",
-          maxWidth: { xs: "100vw", md: "500px" },
-          maxHeight: { xs: "500px", md: "auto" },
+          maxWidth: { xs: "calc(100% - 32px)", md: "500px" },
+          mx: { xs: 2, md: 0 },
+          touchAction: "none",
         }}
         id="main-image"
         ref={imgRef}
@@ -215,7 +235,7 @@ function GetProductDetails(
     <>
       <Box
         id="product-name-container"
-        sx={{ display: "flex", flexDirection: "column" }}
+        sx={{ display: "flex", flexDirection: "column", mx: { xs: 2, md: 0 } }}
       >
         {!isBelowMd && (
           <Typography
@@ -237,15 +257,19 @@ function GetProductDetails(
       <Box
         id="price-and-form-container"
         sx={{
-          width: "100%",
           display: "flex",
           flexDirection: "column",
           gap: "16px",
+          mx: { xs: 2, md: 0 },
         }}
       >
         <Box
           id="price-container"
-          sx={{ display: "flex", gap: "8px", flexDirection: "column" }}
+          sx={{
+            display: "flex",
+            gap: "8px",
+            flexDirection: "column",
+          }}
         >
           <Typography
             id="price-p"
@@ -258,12 +282,11 @@ function GetProductDetails(
             ${currentProduct.price}
           </Typography>
         </Box>
-        <form
-          style={{
+        <Box
+          sx={{
             display: "flex",
             flexDirection: "column",
             gap: "16px",
-            width: "100%",
           }}
         >
           {GetItemSize(chosenSize, setChosenSize, sizeList)}
@@ -273,7 +296,6 @@ function GetProductDetails(
             setChosenQuantity={setChosenQuantity}
           />
           <Button
-            fullWidth
             variant="contained"
             sx={{ height: "50px" }}
             onClick={handleAddToCart}
@@ -281,7 +303,7 @@ function GetProductDetails(
           >
             Add to Cart
           </Button>
-        </form>
+        </Box>
       </Box>
     </>
   );
@@ -302,6 +324,7 @@ function renderProductImages(
           listStyleType: "none",
           gap: "8px",
           padding: 0,
+          mx: { xs: 2, md: 0 },
         }}
       >
         {currentProduct.images?.map((image, index) => {
@@ -310,6 +333,7 @@ function renderProductImages(
             <Box
               id="sub-image-li"
               sx={{ position: "relative", height: "fit-content" }}
+              key={index}
             >
               <Box
                 component="img"
@@ -379,7 +403,6 @@ function GetQuantity({ currentProduct, chosenQuantity, setChosenQuantity }) {
   return (
     <Box
       sx={{
-        width: "100%",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -417,7 +440,6 @@ const GetItemSize = (chosenSize, setChosenSize, sizeList) => {
     <Box
       id="size-choice-container"
       sx={{
-        width: "100%",
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",

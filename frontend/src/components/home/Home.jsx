@@ -32,7 +32,6 @@ function Home() {
       setProducts([]);
       setIsLoading(true);
       const category = params.category;
-      console.log(filters);
       try {
         const response = await axios.get(`${backend}/api/products`, {
           withCredentials: true,

@@ -24,7 +24,6 @@ const CartContent = ({ footerRef }) => {
         });
         const data = response.data.products || response.data;
         setProducts(data);
-        console.log("Products fetched:", data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
