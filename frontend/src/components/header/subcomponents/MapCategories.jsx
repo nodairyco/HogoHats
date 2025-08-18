@@ -1,15 +1,14 @@
 import { Box, Typography } from "@mui/material"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { HeaderButton } from "../StyledHeaderComponents";
 import { useState } from "react";
 
 const MapCategories = ({ isBelowMd, theme }) => {
     const categories = ['women', 'men', 'kids', 'premium']
-    const params = useParams()
     const navigate = useNavigate()
     const [categoriesDropdown, setCategoriesDropdown] = useState(false)
     const location = useLocation()
-    const category = location.pathname.startsWith('/products') ? location.pathname.split('/')[2] : null;
+    const category = location.pathname.startsWith('/HogoHats/products') ? location.pathname.split('/')[3] : null;
 
     const getIconFromCategory = (category) => {
         switch (category) {
@@ -25,7 +24,7 @@ const MapCategories = ({ isBelowMd, theme }) => {
         <Box sx={{
             position: 'relative'
         }}>
-            < HeaderButton id="header-categories" onClick={() => setCategoriesDropdown(prev => !prev)}>
+            <HeaderButton id="header-categories" onClick={() => setCategoriesDropdown(prev => !prev)}>
                 <Box component='i' className={getIconFromCategory(category)[0]} sx={{
                     fontSize: '30px',
                     color: 'primary.txtColor'
@@ -36,8 +35,6 @@ const MapCategories = ({ isBelowMd, theme }) => {
                         {getIconFromCategory(category)[1]}
                     </Typography>
                 }
-
-
             </HeaderButton>
             {
                 categoriesDropdown &&
@@ -60,12 +57,11 @@ const MapCategories = ({ isBelowMd, theme }) => {
                         categories.map((innerCategory) => {
                             return (
                                 <>
-                                    <HeaderButton component='i'
+                                    <HeaderButton component='a'
                                         key={innerCategory}
                                         className={getIconFromCategory(innerCategory)[0]}
                                         onClick={() => {
                                             setCategoriesDropdown(false)
-                                            navigate(`/products/${innerCategory}`)
                                         }}
                                         sx={{
                                             fontSize: '30px',
@@ -75,7 +71,7 @@ const MapCategories = ({ isBelowMd, theme }) => {
                                             m: 0,
                                             backgroundColor: innerCategory === category &&
                                                 `hsl(from ${theme.palette.primary.submain} h s calc(l*0.9))`
-                                        }}>
+                                        }} href={`/HogoHats/products/${innerCategory}`}>
                                         {
                                             !isBelowMd &&
                                             <Typography variant='span' color="primary.txtColor" fontWeight='550' fontSize='1rem'>

@@ -1,5 +1,5 @@
 import { Box, Container, Link, useMediaQuery, useTheme } from "@mui/material";
-import { useLocation, Link as RouterLink } from "react-router-dom";
+import { useLocation, } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import GetSelf from './subcomponents/GetSelf';
 import MapCategories from './subcomponents/MapCategories';
@@ -40,10 +40,10 @@ function Header() {
                     alignItems: 'center',
                     justifyContent:'center'
                 }}>
-                    <RouterLink id='logoContainer'
+                    <Link id='logoContainer'
                         style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', textDecoration: 'none' }}
-                        to='/home'>
-                        <Box component='img' alt='logo' src='/hogo_logo.jpg' sx={{
+                        href='/'>
+                        <Box component='img' alt='logo' src='/HogoHats/hogo_logo.jpg' sx={{
                             height: '80px',
                             aspectRatio: '1/1'
                         }} />
@@ -58,7 +58,7 @@ function Header() {
                                     style={{ borderTop: '1px solid #ffffff', marginTop: '20', display: 'inline-block' }}>O</span>
                             </Typography>
                         }
-                    </RouterLink>
+                    </Link>
                     <MapCategories isBelowMd={isBelowMd} theme={theme} />
                 </Box>
                 <HeaderSearch isBelowMd={isBelowMd} />

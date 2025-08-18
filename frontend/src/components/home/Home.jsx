@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect } from "react";
 import ProductContext from "../../ProductContext.jsx";
 import axios from "axios";
 import { Box, ImageList, useMediaQuery, useTheme } from "@mui/material";
@@ -8,113 +8,136 @@ import ItemCard from "./subcomponents/ItemCard.jsx";
 import HomeTopBar from "./subcomponents/HomeTopBar.jsx";
 
 function Home() {
-    const {
-        setProducts,
-        setFilters,
-        hasMore,
-        setHasMore,
-        isLoading,
-        setIsLoading,
-        setTotalItems,
-        filters,
-        backend
-    } = useContext(ProductContext)
-    const params = useParams()
-    const [searchParams] = useSearchParams()
-    const displayPopUp = searchParams.has('inl') && searchParams.get('inl') === 'true'
-    const navigate = useNavigate()
+  const {
+    setProducts,
+    setFilters,
+    hasMore,
+    setHasMore,
+    isLoading,
+    setIsLoading,
+    setTotalItems,
+    filters,
+    backend,
+  } = useContext(ProductContext);
+  const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const displayPopUp =
+    searchParams.has("inl") && searchParams.get("inl") === "true";
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            setFilters(prev => ({ ...prev, pageNum: 1 }))
-            setHasMore(true)
-            setProducts([])
-            setIsLoading(true)
-            const category = params.category
-            console.log(category)
-            try {
-                const response = await axios.get(`${backend}/api/products`,
-                    {
-                        withCredentials: true,
-                        params: {
-                            limit: 10,
-                            page: filters.pageNum,
-                            sortBy: filters.sortBy,
-                            sortOrder: filters.sortOrder,
-                            minPrice: filters.minPrice,
-                            maxPrice: filters.maxPrice,
-                            category: navigate.pathname === '/home' ? '' : category
-                        },
-                        headers: {
-                            Authorization: 'Bearer SvQf1kk5MFTPMON0jxkN3DMn'
-                        }
-                    })
-                const productsArr = response.data.products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setFilters((prev) => ({ ...prev, pageNum: 1 }));
+      setHasMore(true);
+      setProducts([]);
+      setIsLoading(true);
+      const category = params.category;
+      console.log(filters);
+      try {
+        const response = await axios.get(`${backend}/api/products`, {
+          withCredentials: true,
+          params: {
+            limit: 10,
+            page: filters.pageNum,
+            sortBy: filters.sortBy,
+            sortOrder: filters.sortOrder,
+            minPrice: filters.minPrice,
+            maxPrice: filters.maxPrice,
+            category: navigate.pathname === "/home" ? "" : category,
+          },
+          headers: {
+            Authorization: "Bearer SvQf1kk5MFTPMON0jxkN3DMn",
+          },
+        });
+        const productsArr = response.data.products;
 
-                setProducts(prev => filters.pageNum === 1 ? productsArr : [...prev, ...productsArr])
-                setTotalItems(response.data.total)
+        setProducts((prev) =>
+          filters.pageNum === 1 ? productsArr : [...prev, ...productsArr]
+        );
+        setTotalItems(response.data.total);
 
-                if (response.data.totalPages <= filters.pageNum) {
-                    setHasMore(false)
-                }
-
-            } catch (errors) {
-                console.log("Error: ", errors.message || errors.response?.data.message)
-            } finally {
-                setIsLoading(false)
-            }
+        if (response.data.totalPages <= filters.pageNum) {
+          setHasMore(false);
         }
+      } catch (errors) {
+        console.log("Error: ", errors);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        fetchProducts()
-    }, [filters.pageNum, filters.sortOrder, filters.sortBy, filters.minPrice, filters.maxPrice, params.category]);
+    fetchProducts();
+  }, [
+    filters.pageNum,
+    filters.sortOrder,
+    filters.sortBy,
+    filters.minPrice,
+    filters.maxPrice,
+    params.category,
+  ]);
 
+  // Update filters.pageNum on every scroll to bottom.
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const scrollTop = document.documentElement.scrollTop;
+      const clientHeight = document.documentElement.clientHeight;
 
-    // Update filters.pageNum on every scroll to bottom. 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollHeight = document.documentElement.scrollHeight;
-            const scrollTop = document.documentElement.scrollTop;
-            const clientHeight = document.documentElement.clientHeight;
+      if (
+        !isLoading &&
+        hasMore &&
+        scrollTop + clientHeight >= scrollHeight - 200
+      ) {
+        // Close to bottom
+        setFilters((prev) => ({ ...prev, pageNum: prev.pageNum + 1 }));
+      }
+    };
 
-            if (!isLoading && hasMore && scrollTop + clientHeight >= scrollHeight - 200) {
-                // Close to bottom
-                setFilters(prev => ({ ...prev, pageNum: prev.pageNum + 1 }));
-            }
-        };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading, hasMore]);
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [isLoading, hasMore]);
-
+  if (isLoading) {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}>
-            <HomeTopBar />
-            <PopUp disp={displayPopUp} />
-            <MapItems />
-        </Box>
+      <>
+        <div>loading...</div>
+        <PopUp disp={displayPopUp} />
+      </>
     );
+  }
+
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
+      <HomeTopBar />
+      <PopUp disp={displayPopUp} />
+      <MapItems />
+    </Box>
+  );
 }
 
 export default Home;
 
 function MapItems() {
-    const theme = useTheme()
+  const theme = useTheme();
 
-    const { products } = useContext(ProductContext)
-    const isXs = useMediaQuery(theme.breakpoints.down('sm')); // <600px
-    const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md')); // 600–900px
-    const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg')); // 900–1200px
+  const { products } = useContext(ProductContext);
+  const isXs = useMediaQuery(theme.breakpoints.down("sm")); // <600px
+  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600–900px
+  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); // 900–1200px
 
-    const cols = isXs ? 2 : isSm ? 2 : isMd ? 3 : 4;
+  const cols = isXs ? 2 : isSm ? 2 : isMd ? 3 : 4;
 
-    return (
-
-        <Box sx={{ margin: '0 auto', width: '100%' }}>
-            <ImageList cols={cols} gap={16} sx={{ p: isXs ? 1 : 4, width: '100%', overscrollBehavior: 'none' }}>
-                {products.map((product) => (
-                    <ItemCard product={product} />
-                ))}
-            </ImageList>
-        </Box>
-    )
+  return (
+    <Box sx={{ margin: "0 auto", width: "100%" }}>
+      <ImageList
+        cols={cols}
+        gap={16}
+        sx={{ p: isXs ? 1 : 4, width: "100%", overscrollBehavior: "none" }}
+      >
+        {products.map((product) => (
+          <ItemCard product={product} />
+        ))}
+      </ImageList>
+    </Box>
+  );
 }

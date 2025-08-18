@@ -8,9 +8,7 @@ const GetCart = ({ isBelowMd }) => {
     const navigate = useNavigate()
 
     return (
-        <HeaderButton id='topbar-cart-container' onClick={() => {
-            navigate('/cart')
-        }}>
+        <HeaderButton id='topbar-cart-container' component='a' href='cart'> 
             <Box component='i' className="lni lni-cart-1" sx={{
                 color: 'primary.txtColor',
                 fontSize: '30px'
