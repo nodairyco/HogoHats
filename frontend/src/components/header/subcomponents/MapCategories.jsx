@@ -71,7 +71,7 @@ const MapCategories = ({ isBelowMd, theme }) => {
                                             m: 0,
                                             backgroundColor: innerCategory === category &&
                                                 `hsl(from ${theme.palette.primary.submain} h s calc(l*0.9))`
-                                        }} href={`/HogoHats/products/${innerCategory}`}>
+                                        }} href={`/products/${innerCategory}`}>
                                         {
                                             !isBelowMd &&
                                             <Typography variant='span' color="primary.txtColor" fontWeight='550' fontSize='1rem'>

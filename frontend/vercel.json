@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/HogoHats/(.*)",
-      "destination": "/HogoHats/index.html"
-    },
-    {
-      "source": "/HogoHats",
-      "destination": "/HogoHats/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "trailingSlash": false

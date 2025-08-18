@@ -20,7 +20,7 @@ function Home() {
     backend,
   } = useContext(ProductContext);
   const params = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const displayPopUp =
     searchParams.has("inl") && searchParams.get("inl") === "true";
   const navigate = useNavigate();

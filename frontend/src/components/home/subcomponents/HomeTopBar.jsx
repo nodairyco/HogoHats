@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Box, Button, Container, Slider, useTheme } from "@mui/material";
+import { Box, Button, Container, Slider } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import ProductContext from "../../../ProductContext.jsx";
 
 function HomeTopBar() {
   const { totalItems, setFilters, filters } = useContext(ProductContext);
-  const theme = useTheme();
   const sortStuff = [
     "Name, A-Z",
     "Name, Z-A",

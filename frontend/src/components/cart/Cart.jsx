@@ -6,7 +6,6 @@ import axios from 'axios';
 import ProductContext from '../../ProductContext.jsx';
 import CartInfo from './submodules/CartInfo.jsx';
 import CartHeader from './submodules/CartHeader.jsx';
-import { useSearchParams } from 'react-router-dom';
 import Shipping from './submodules/Shipping.jsx';
 import { CartSubCompProvider, useCartSubComp } from './CartSubCompContext.jsx';
 

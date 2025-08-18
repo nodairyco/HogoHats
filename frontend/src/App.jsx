@@ -3,10 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/home/Home.jsx";
 import LoginPage from "./components/registration/LoginPage.jsx";
 import AdminPanel from "./components/adminpanel/AdminPanel.jsx";
-import { Suspense, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ProductDetails from "./components/productpage/ProductDetails.jsx";
 import Test from "./Test.jsx";
-import Cookies from "universal-cookie";
 import Header from "./components/header/Header.jsx";
 import ProductContext from "./ProductContext.jsx";
 import { CartProvider } from "./CartContext.jsx";
@@ -16,7 +15,6 @@ import { Box } from "@mui/material";
 
 function App() {
   const [products, setProducts] = useState([]);
-  const cookies = new Cookies(null, { path: "/" });
   const [filters, setFilters] = useState({
     pageNum: 1,
     sortBy: "",
@@ -63,16 +61,14 @@ function App() {
               }}
             >
               <Routes>
-                <Route path="/HogoHats">
-                  <Route path="" element={<Home />} />
-                  <Route path="products/:category" element={<Home />} />
-                  <Route path="admin" element={<AdminPanel />} />
-                  <Route path="signup" element={<SignUpPage />} />
-                  <Route path="login" element={<LoginPage />} />
-                  <Route path="product/:id" element={<ProductDetails />} />
-                  <Route path="test" element={<Test />} />
-                  <Route path="cart" element={<Cart footerRef={footerRef} />} />
-                </Route>
+                <Route path="" element={<Home />} />
+                <Route path="products/:category" element={<Home />} />
+                <Route path="admin" element={<AdminPanel />} />
+                <Route path="signup" element={<SignUpPage />} />
+                <Route path="login" element={<LoginPage />} />
+                <Route path="product/:id" element={<ProductDetails />} />
+                <Route path="test" element={<Test />} />
+                <Route path="cart" element={<Cart footerRef={footerRef} />} />
               </Routes>
             </main>
             <Footer ref={footerRef} />

@@ -1,14 +1,12 @@
 import { Box, Typography } from "@mui/material"
 import useCart from "../../../CartContext";
-import { useNavigate } from "react-router-dom";
 import { HeaderButton } from "../StyledHeaderComponents";
 
 const GetCart = ({ isBelowMd }) => {
     const { getCartItemCount } = useCart()
-    const navigate = useNavigate()
 
     return (
-        <HeaderButton id='topbar-cart-container' component='a' href='cart'> 
+        <HeaderButton id='topbar-cart-container' component='a' href='/cart'> 
             <Box component='i' className="lni lni-cart-1" sx={{
                 color: 'primary.txtColor',
                 fontSize: '30px'
