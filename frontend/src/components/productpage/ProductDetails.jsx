@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Box, Button } from "@mui/material";
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import useCart from "../../CartContext";
 import ProductContext from "../../ProductContext";
@@ -17,6 +17,8 @@ function ProductDetails() {
   const { addToCart } = useCart();
   const { backend } = useContext(ProductContext);
   const [isLoading, setIsLoading] = useState(false);
+  const theme = useTheme();
+  const isBelowMd = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleAddToCart = () => {
     if (!chosenSize) {
@@ -56,12 +58,8 @@ function ProductDetails() {
     fetchProduct();
   }, []);
 
-  if(isLoading){
-    return (
-        <div>
-            loading...
-        </div>
-    )
+  if (isLoading) {
+    return <div>loading...</div>;
   }
 
   return (
@@ -69,20 +67,35 @@ function ProductDetails() {
       id="product-details-container"
       sx={{
         height: "fit-content",
-        paddingTop: "80px",
         display: "flex",
-        gap: 4,
+        gap: { xs: 0, md: 4 },
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "center",
       }}
     >
-      <Box id="images-container" sx={{ display: "flex", gap: 4 }}>
+      <Box
+        id="images-container"
+        sx={{
+          display: "flex",
+          gap: { xs: 0, md: 4 },
+          flexDirection: { xs: "column-reverse", md: "row" },
+        }}
+      >
         {renderProductImages(
           currentProduct,
           currentlyChosenPicture,
           setCurrentlyChosenPicture
         )}
         <MainImageContainer currentlyChosenPicture={currentlyChosenPicture} />
+        {isBelowMd && (
+          <Typography
+            id="product-name"
+            variant="p"
+            sx={{ fontSize: "30px", fontWeight: "600" }}
+          >
+            {currentProduct.name}
+          </Typography>
+        )}
       </Box>
       <Box
         id="details"
@@ -103,7 +116,8 @@ function ProductDetails() {
           chosenSize,
           setChosenSize,
           sizeList,
-          handleAddToCart
+          handleAddToCart,
+          isBelowMd
         )}
       </Box>
     </Box>
@@ -170,12 +184,14 @@ const MainImageContainer = ({ currentlyChosenPicture }) => {
       onMouseMove={(event) => handleHover(event)}
       onClick={() => handleZoom()}
     >
-      <img
+      <Box
+        component="img"
         alt="currently-chosen-picture"
         src={currentlyChosenPicture}
-        style={{
+        sx={{
           borderRadius: "8px",
-          maxWidth: "500px",
+          maxWidth: { xs: "100vw", md: "500px" },
+          maxHeight: { xs: "500px", md: "auto" },
         }}
         id="main-image"
         ref={imgRef}
@@ -192,7 +208,8 @@ function GetProductDetails(
   chosenSize,
   setChosenSize,
   sizeList,
-  handleAddToCart
+  handleAddToCart,
+  isBelowMd
 ) {
   return (
     <>
@@ -200,13 +217,15 @@ function GetProductDetails(
         id="product-name-container"
         sx={{ display: "flex", flexDirection: "column" }}
       >
-        <Typography
-          id="product-name"
-          variant="p"
-          sx={{ fontSize: "30px", fontWeight: "600" }}
-        >
-          {currentProduct.name}
-        </Typography>
+        {!isBelowMd && (
+          <Typography
+            id="product-name"
+            variant="p"
+            sx={{ fontSize: "30px", fontWeight: "600" }}
+          >
+            {currentProduct.name}
+          </Typography>
+        )}
         <Typography
           id="description"
           variant="p"
@@ -275,10 +294,11 @@ function renderProductImages(
 ) {
   return (
     <Box id="sub-image-container-list">
-      <ul
-        style={{
+      <Box
+        component="ul"
+        sx={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: { xs: "row", md: "column" },
           listStyleType: "none",
           gap: "8px",
           padding: 0,
@@ -291,11 +311,13 @@ function renderProductImages(
               id="sub-image-li"
               sx={{ position: "relative", height: "fit-content" }}
             >
-              <img
+              <Box
+                component="img"
                 src={image.url}
                 alt={`sub-image-${index}`}
-                style={{
-                  width: "160px",
+                sx={{
+                  width: { xs: "auto", md: "160px" },
+                  height: { xs: "100px", md: "auto" },
                   borderRadius: "8px",
                 }}
               />
@@ -323,7 +345,7 @@ function renderProductImages(
             </Box>
           );
         })}
-      </ul>
+      </Box>
     </Box>
   );
 }
