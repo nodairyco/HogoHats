@@ -1,14 +1,13 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "hogo.vercel.app"
-        }
-      ],
-      "destination": "/index.html"
+      "source": "/HogoHats/(.*)",
+      "destination": "/HogoHats/index.html"
+    },
+    {
+      "source": "/HogoHats",
+      "destination": "/HogoHats/index.html"
     }
-  ]
+  ],
+  "trailingSlash": false
 }
