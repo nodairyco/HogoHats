@@ -45,10 +45,6 @@ const CartContent = ({ footerRef }) => {
               display: "flex",
               flexDirection: "column",
               gap: 3,
-              height: { xs: "400px", md: "auto" },
-              overflow: {
-                xs: "scroll",
-              },
             }}
             id="cart-items"
           >
@@ -89,7 +85,7 @@ const CartContent = ({ footerRef }) => {
         id="cart-items-info-container"
         sx={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: { xs: "column", sm: "row" },
           gap: 4,
           padding: "0 !important",
         }}

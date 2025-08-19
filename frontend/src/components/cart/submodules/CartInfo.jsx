@@ -1,13 +1,11 @@
 import { useTheme } from "@emotion/react";
 import { Box, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useCartSubComp } from '../CartSubCompContext.jsx';
 
 export default function CartInfo({ getCartTotal, footerRef, }) {
     const theme = useTheme()
 
-    const navigate = useNavigate()
-    const { shippingData, currentStep, handleClick } = useCartSubComp();
+    const { currentStep, handleClick } = useCartSubComp();
 
     const txtColor = `hsl(from ${theme.palette.primary.submain} h s calc(l*0.3))`
 
@@ -30,15 +28,6 @@ export default function CartInfo({ getCartTotal, footerRef, }) {
             borderRadius: '14px',
             p: 2,
             height: 'fit-content',
-            [theme.breakpoints.down('md')]: {
-                position: 'fixed',
-                bottom: footerRef.current ? footerRef.current.offsetHeight : 0,
-                width: '100%',
-                px: 'auto',
-                left: 0,
-                borderBottomRightRadius: '0px',
-                borderBottomLeftRadius: '0px'
-            }
         }} id='cart-info'>
             <Box id='cart-total' sx={{
                 display: 'flex',

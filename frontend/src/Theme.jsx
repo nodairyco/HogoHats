@@ -6,7 +6,7 @@ const Theme = createTheme({
             main: "#5c342c",
             contrastText: "#ffffff",
             submain: "#544f4f",
-            txtColor: 'hsl(from #544f4f h s calc(l*0.3))',
+            txtColor: 'hsl(from #544f4f h s calc(l*1.3))',
             componentBgColor: 'hsl(from #28292d h s calc(l*1.5))',
             bgColor: "#28292d"
         },
