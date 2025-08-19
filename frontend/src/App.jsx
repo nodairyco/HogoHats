@@ -12,6 +12,7 @@ import { CartProvider } from "./CartContext.jsx";
 import Cart from "./components/cart/Cart.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import { Box } from "@mui/material";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -48,31 +49,34 @@ function App() {
         }}
       >
         <CartProvider>
-          <Box sx={{}}>
-            <main
-              style={{
-                display: "flex",
-                minHeight: Header() === null ? "100vh" : "calc(100vh - 190px)",
-                justifyContent: "center",
-                overflowY: "auto",
-                flexDirection: "row",
-                marginTop: Header() === null ? "0" : "100px",
-                position: "relative",
-              }}
-            >
-              <Routes>
-                <Route path="" element={<Home />} />
-                <Route path="products/:category" element={<Home />} />
-                <Route path="admin" element={<AdminPanel />} />
-                <Route path="signup" element={<SignUpPage />} />
-                <Route path="login" element={<LoginPage />} />
-                <Route path="product/:id" element={<ProductDetails />} />
-                <Route path="test" element={<Test />} />
-                <Route path="cart" element={<Cart footerRef={footerRef} />} />
-              </Routes>
-            </main>
-            <Footer ref={footerRef} />
-          </Box>
+          <SkeletonTheme baseColor="#313131" highlightColor="#525252">
+            <Box sx={{}}>
+              <main
+                style={{
+                  display: "flex",
+                  minHeight:
+                    Header() === null ? "100vh" : "calc(100vh - 190px)",
+                  justifyContent: "center",
+                  overflowY: "auto",
+                  flexDirection: "row",
+                  marginTop: Header() === null ? "0" : "100px",
+                  position: "relative",
+                }}
+              >
+                <Routes>
+                  <Route path="" element={<Home />} />
+                  <Route path="products/:category" element={<Home />} />
+                  <Route path="admin" element={<AdminPanel />} />
+                  <Route path="signup" element={<SignUpPage />} />
+                  <Route path="login" element={<LoginPage />} />
+                  <Route path="product/:id" element={<ProductDetails />} />
+                  <Route path="test" element={<Test />} />
+                  <Route path="cart" element={<Cart footerRef={footerRef} />} />
+                </Routes>
+              </main>
+              <Footer ref={footerRef} />
+            </Box>
+          </SkeletonTheme>
           <Header />
         </CartProvider>
       </ProductContext.Provider>

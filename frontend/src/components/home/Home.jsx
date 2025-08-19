@@ -6,6 +6,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import PopUp from "./subcomponents/PopUp.jsx";
 import ItemCard from "./subcomponents/ItemCard.jsx";
 import HomeTopBar from "./subcomponents/HomeTopBar.jsx";
+import CardSkeleton from "./subcomponents/CardSkeleton.jsx";
 
 function Home() {
   const {
@@ -96,14 +97,14 @@ function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading, hasMore]);
 
-  if (isLoading) {
-    return (
-      <>
-        <div>loading...</div>
-        <PopUp disp={displayPopUp} />
-      </>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <>
+  //       <div>loading...</div>
+  //       <PopUp disp={displayPopUp} />
+  //     </>
+  //   );
+  // }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
@@ -119,12 +120,29 @@ export default Home;
 function MapItems() {
   const theme = useTheme();
 
-  const { products } = useContext(ProductContext);
+  const { products, isLoading } = useContext(ProductContext);
   const isXs = useMediaQuery(theme.breakpoints.down("sm")); // <600px
   const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600–900px
   const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); // 900–1200px
 
   const cols = isXs ? 2 : isSm ? 2 : isMd ? 3 : 4;
+  const arr = Array(12).keys()
+
+  if (isLoading) {
+    return (
+      <Box sx={{ margin: "0 auto", width: "100%" }}>
+        <ImageList
+          cols={cols}
+          gap={16}
+          sx={{ p: isXs ? 1 : 4, width: "100%", overscrollBehavior: "none" }}
+        >
+          {arr.map((_, index) => (
+            <CardSkeleton key={index} />
+          ))}
+        </ImageList>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ margin: "0 auto", width: "100%" }}>
@@ -134,7 +152,7 @@ function MapItems() {
         sx={{ p: isXs ? 1 : 4, width: "100%", overscrollBehavior: "none" }}
       >
         {products.map((product) => (
-          <ItemCard product={product} />
+          <ItemCard key={product._id} product={product} />
         ))}
       </ImageList>
     </Box>

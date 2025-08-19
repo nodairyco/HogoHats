@@ -99,7 +99,7 @@ function HomeTopBar() {
           variant="span"
           sx={{
             fontWeight: 600,
-            fontSize: "24px",
+            fontSize: { xs: "18px", sm: "24px" },
           }}
         >
           Total Items: {totalItems}

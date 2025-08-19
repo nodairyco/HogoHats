@@ -5,6 +5,8 @@ import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import useCart from "../../CartContext";
 import ProductContext from "../../ProductContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function ProductDetails() {
   const params = useParams();
@@ -15,7 +17,7 @@ function ProductDetails() {
   const inputRef = useRef(null);
   const sizeList = ["s", "m", "l"];
   const { addToCart } = useCart();
-  const { backend, isLoading, setIsLoading } = useContext(ProductContext);
+  const { backend, setIsLoading } = useContext(ProductContext);
   const theme = useTheme();
   const isBelowMd = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -57,9 +59,9 @@ function ProductDetails() {
     fetchProduct();
   }, []);
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>loading...</div>;
+  // }
 
   return (
     <Box
@@ -86,8 +88,10 @@ function ProductDetails() {
           currentlyChosenPicture,
           setCurrentlyChosenPicture
         )}
+
         <MainImageContainer currentlyChosenPicture={currentlyChosenPicture} />
-        {isBelowMd && (
+
+        {isBelowMd && currentProduct.name ? (
           <Typography
             id="product-name"
             variant="p"
@@ -100,6 +104,8 @@ function ProductDetails() {
           >
             {currentProduct.name}
           </Typography>
+        ) : (
+          <Skeleton height={30} />
         )}
       </Box>
       <Box
@@ -203,19 +209,26 @@ const MainImageContainer = ({ currentlyChosenPicture }) => {
       onTouchStart={() => setHovered(true)}
       onTouchEnd={() => setHovered(false)}
     >
-      <Box
-        component="img"
-        alt="currently-chosen-picture"
-        src={currentlyChosenPicture}
-        sx={{
-          borderRadius: "8px",
-          maxWidth: { xs: "calc(100% - 32px)", md: "500px" },
-          mx: { xs: 2, md: 0 },
-          touchAction: "none",
-        }}
-        id="main-image"
-        ref={imgRef}
-      />
+      {currentlyChosenPicture ? (
+        <Box
+          component="img"
+          alt="currently-chosen-picture"
+          src={currentlyChosenPicture}
+          sx={{
+            borderRadius: "8px",
+            maxWidth: { xs: "calc(100% - 32px)", md: "500px" },
+            mx: { xs: 2, md: 0 },
+            touchAction: "none",
+          }}
+          id="main-image"
+          ref={imgRef}
+        />
+      ) : (
+        <Skeleton
+          height={"calc(100vw - 32px)"}
+          width={"calc(100vw - 32px)"}
+        ></Skeleton>
+      )}
     </Box>
   );
 };
@@ -243,7 +256,7 @@ function GetProductDetails(
             variant="p"
             sx={{ fontSize: "30px", fontWeight: "600" }}
           >
-            {currentProduct.name}
+            {currentProduct.name || <Skeleton />}
           </Typography>
         )}
         <Typography
@@ -251,7 +264,7 @@ function GetProductDetails(
           variant="p"
           sx={{ fontSize: "20px", fontWeight: "400" }}
         >
-          {currentProduct.description}
+          {currentProduct.description || <Skeleton />}
         </Typography>
       </Box>
       <Box
@@ -271,16 +284,25 @@ function GetProductDetails(
             flexDirection: "column",
           }}
         >
-          <Typography
-            id="price-p"
-            variant="h5"
-            sx={{ fontWeight: "700", fontSize: "18px" }}
-          >
-            PRICE:
-          </Typography>
-          <Typography variant="h5" sx={{ fontWeight: "700", fontSize: "24px" }}>
-            ${currentProduct.price}
-          </Typography>
+          {currentProduct.price ? (
+            <>
+              <Typography
+                id="price-p"
+                variant="h5"
+                sx={{ fontWeight: "700", fontSize: "18px" }}
+              >
+                PRICE:
+              </Typography>
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: "700", fontSize: "24px" }}
+              >
+                ₾{currentProduct.price}
+              </Typography>
+            </>
+          ) : (
+            <Skeleton count={2} height={21} />
+          )}
         </Box>
         <Box
           sx={{
@@ -368,7 +390,12 @@ function renderProductImages(
               />
             </Box>
           );
-        })}
+        }) || (
+          <>
+            <Skeleton height={100} width={100} />
+            <Skeleton height={100} width={100} />
+          </>
+        )}
       </Box>
     </Box>
   );
@@ -423,7 +450,8 @@ function GetQuantity({ currentProduct, chosenQuantity, setChosenQuantity }) {
       <Button
         variant="outlined"
         disabled={
-          chosenQuantity === currentProduct.stock - totalItemQuantityIncart
+          chosenQuantity === currentProduct.stock - totalItemQuantityIncart ||
+          !currentProduct.stock
         }
         onClick={() => {
           handleQuantityChange(true);
