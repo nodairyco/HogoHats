@@ -10,6 +10,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 function ProductDetails() {
   const params = useParams();
+  const imgRef = useRef(null);
   const [currentProduct, setCurrentProduct] = useState({});
   const [currentlyChosenPicture, setCurrentlyChosenPicture] = useState();
   const [chosenQuantity, setChosenQuantity] = useState(0);
@@ -86,26 +87,34 @@ function ProductDetails() {
         {renderProductImages(
           currentProduct,
           currentlyChosenPicture,
-          setCurrentlyChosenPicture
+          setCurrentlyChosenPicture,
+          imgRef
         )}
 
-        <MainImageContainer currentlyChosenPicture={currentlyChosenPicture} />
+        <MainImageContainer
+          currentlyChosenPicture={currentlyChosenPicture}
+          imgRef={imgRef}
+        />
 
-        {isBelowMd && currentProduct.name ? (
-          <Typography
-            id="product-name"
-            variant="p"
-            sx={{
-              fontSize: "30px",
-              fontWeight: "600",
-              pb: "10px",
-              mx: { xs: 2, md: 0 },
-            }}
-          >
-            {currentProduct.name}
-          </Typography>
+        {isBelowMd ? (
+          currentProduct.name ? (
+            <Typography
+              id="product-name"
+              variant="p"
+              sx={{
+                fontSize: "30px",
+                fontWeight: "600",
+                pb: "10px",
+                mx: { xs: 2, md: 0 },
+              }}
+            >
+              {currentProduct.name}
+            </Typography>
+          ) : (
+            <Skeleton height={30} id="smth" />
+          )
         ) : (
-          <Skeleton height={30} />
+          <></>
         )}
       </Box>
       <Box
@@ -137,9 +146,8 @@ function ProductDetails() {
 
 export default ProductDetails;
 
-const MainImageContainer = ({ currentlyChosenPicture }) => {
+const MainImageContainer = ({ currentlyChosenPicture, imgRef }) => {
   const ref = useRef(null);
-  const imgRef = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [offset, setOffset] = useState({
     x: 0,
@@ -224,10 +232,14 @@ const MainImageContainer = ({ currentlyChosenPicture }) => {
           ref={imgRef}
         />
       ) : (
-        <Skeleton
-          height={"calc(100vw - 32px)"}
-          width={"calc(100vw - 32px)"}
-        ></Skeleton>
+        <Box
+          sx={{
+            height: { xs: "calc(100vw - 32px)", sm: "300px" },
+            width: { xs: "cacc(100vw - 32px)", sm: "300px" },
+          }}
+        >
+          <Skeleton height={"100%"} width={"100%"} />
+        </Box>
       )}
     </Box>
   );
@@ -334,7 +346,8 @@ function GetProductDetails(
 function renderProductImages(
   currentProduct,
   currentlyChosenPicture,
-  setCurrentlyChosenPicture
+  setCurrentlyChosenPicture,
+  imgRef
 ) {
   return (
     <Box id="sub-image-container-list">
@@ -346,7 +359,13 @@ function renderProductImages(
           listStyleType: "none",
           gap: "8px",
           padding: 0,
+          my: 0,
           mx: { xs: 2, md: 0 },
+          maxHeight: {
+            xs: "auto",
+            md: imgRef.current?.getBoundingClientRect().height,
+          },
+          overflow: "scroll",
         }}
       >
         {currentProduct.images?.map((image, index) => {
