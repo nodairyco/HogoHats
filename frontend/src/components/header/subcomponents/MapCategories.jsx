@@ -1,14 +1,13 @@
 import { Box, Typography } from "@mui/material"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { HeaderButton } from "../StyledHeaderComponents";
 import { useState } from "react";
 
 const MapCategories = ({ isBelowMd, theme }) => {
     const categories = ['women', 'men', 'kids', 'premium']
-    const navigate = useNavigate()
     const [categoriesDropdown, setCategoriesDropdown] = useState(false)
     const location = useLocation()
-    const category = location.pathname.startsWith('/HogoHats/products') ? location.pathname.split('/')[3] : null;
+    const category = location.pathname.startsWith('/products') ? location.pathname.split('/')[2] : null;
 
     const getIconFromCategory = (category) => {
         switch (category) {
