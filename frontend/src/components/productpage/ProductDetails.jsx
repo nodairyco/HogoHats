@@ -8,6 +8,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { MainImageContainer } from "./subcomponents/MainImageContainer";
 import RenderProductImages from "./subcomponents/RenderProductImages";
 import GetProductDetails from "./subcomponents/GetProductDetails";
+import Nav from "../navbar/Nav";
 
 function ProductDetails() {
   const params = useParams();
@@ -64,56 +65,69 @@ function ProductDetails() {
       sx={{
         height: "fit-content",
         display: "flex",
-        gap: { xs: 0, md: 4 },
-        flexDirection: { xs: "column", md: "row" },
+        gap: 4,
+        flexDirection: "column",
         justifyContent: "center",
         overflow: "hidden",
         color: "primary.subTxtColor",
-        my: { xs: 0, md: 9 },
+        my: { xs: 0, md: 3 },
       }}
     >
+      <Nav customList={["Home", "products", currentProduct.category]} />
       <Box
-        id="images-container"
         sx={{
+          height: "fit-content",
           display: "flex",
           gap: { xs: 0, md: 4 },
-          flexDirection: { xs: "column-reverse", md: "row" },
-          flex: 1,
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "center",
+          overflow: "hidden",
+          color: "primary.subTxtColor",
         }}
       >
-        <RenderProductImages
-          currentProduct={currentProduct}
-          currentlyChosenPicture={currentlyChosenPicture}
-          setCurrentlyChosenPicture={setCurrentlyChosenPicture}
-          height={height}
-        />
+        <Box
+          id="images-container"
+          sx={{
+            display: "flex",
+            gap: { xs: 0, md: 4 },
+            flexDirection: { xs: "column-reverse", md: "row" },
+            flex: 1,
+          }}
+        >
+          <RenderProductImages
+            currentProduct={currentProduct}
+            currentlyChosenPicture={currentlyChosenPicture}
+            setCurrentlyChosenPicture={setCurrentlyChosenPicture}
+            height={height}
+          />
 
-        <MainImageContainer
-          currentlyChosenPicture={currentlyChosenPicture}
-          setHeight={setHeight}
-        />
-      </Box>
-      <Box
-        id="details"
-        sx={{
-          minWidth: "290px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          justifyContent: "space-between",
-          pb: 2,
-          flex: 1,
-        }}
-      >
-        <GetProductDetails
-          currentProduct={currentProduct}
-          chosenQuantity={chosenQuantity}
-          setChosenQuantity={setChosenQuantity}
-          chosenSize={chosenSize}
-          setChosenSize={setChosenSize}
-          sizeList={sizeList}
-          handleAddToCart={handleAddToCart}
-        />
+          <MainImageContainer
+            currentlyChosenPicture={currentlyChosenPicture}
+            setHeight={setHeight}
+          />
+        </Box>
+        <Box
+          id="details"
+          sx={{
+            minWidth: "290px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            justifyContent: "space-between",
+            pb: 2,
+            flex: 1,
+          }}
+        >
+          <GetProductDetails
+            currentProduct={currentProduct}
+            chosenQuantity={chosenQuantity}
+            setChosenQuantity={setChosenQuantity}
+            chosenSize={chosenSize}
+            setChosenSize={setChosenSize}
+            sizeList={sizeList}
+            handleAddToCart={handleAddToCart}
+          />
+        </Box>
       </Box>
     </Container>
   );

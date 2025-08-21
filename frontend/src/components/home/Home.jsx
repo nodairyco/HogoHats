@@ -1,12 +1,13 @@
 import { useContext, useEffect } from "react";
 import ProductContext from "../../ProductContext.jsx";
 import axios from "axios";
-import { Box, ImageList, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, ImageList, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import PopUp from "./subcomponents/PopUp.jsx";
 import ItemCard from "./subcomponents/ItemCard.jsx";
 import HomeTopBar from "./subcomponents/HomeTopBar.jsx";
 import CardSkeleton from "./subcomponents/CardSkeleton.jsx";
+import Nav from "../navbar/Nav.jsx";
 
 function Home() {
   const {
@@ -96,6 +97,7 @@ function Home() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
+      <Nav/>
       <HomeTopBar />
       <PopUp disp={displayPopUp} />
       <MapItems />
@@ -118,7 +120,7 @@ function MapItems() {
 
   if (isLoading) {
     return (
-      <Box sx={{ margin: "0 auto", width: "100%" }}>
+      <Container sx={{ margin: "0 auto", width: "100%" }}>
         <ImageList
           cols={cols}
           gap={16}
@@ -128,7 +130,7 @@ function MapItems() {
             <CardSkeleton key={index} />
           ))}
         </ImageList>
-      </Box>
+      </Container>
     );
   }
 

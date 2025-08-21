@@ -8,11 +8,12 @@ import CartInfo from "./submodules/CartInfo.jsx";
 import CartHeader from "./submodules/CartHeader.jsx";
 import Shipping from "./submodules/Shipping.jsx";
 import { CartSubCompProvider, useCartSubComp } from "./CartSubCompContext.jsx";
+import Nav from "../navbar/Nav.jsx";
 
 const CartContent = ({ footerRef }) => {
   const { currentStep } = useCartSubComp();
 
-  const { getCart, getCartTotal, getCartItemCount, clearCart } = useCart();
+  const { getCart, getCartTotal, clearCart } = useCart();
 
   const { products, setProducts, backend } = useContext(ProductContext);
 
@@ -64,8 +65,8 @@ const CartContent = ({ footerRef }) => {
 
   return (
     <Container maxWidth="lg" sx={{ mx: "auto", py: 2 }} id="cart-container">
+      <Nav />
       <CartHeader
-        getCartItemCount={getCartItemCount}
         clearCart={clearCart}
         stepName={currentStep.toUpperCase()}
       />
