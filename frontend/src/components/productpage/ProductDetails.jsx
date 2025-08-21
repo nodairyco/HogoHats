@@ -40,9 +40,6 @@ function ProductDetails() {
           `${backend}/api/products/${params.id}`,
           {
             withCredentials: true,
-            headers: {
-              Authorization: "Bearer SvQf1kk5MFTPMON0jxkN3DMn",
-            },
           }
         );
         const product = response.data;

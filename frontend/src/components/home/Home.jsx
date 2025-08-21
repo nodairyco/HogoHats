@@ -45,9 +45,6 @@ function Home() {
             maxPrice: filters.maxPrice,
             category: navigate.pathname === "/home" ? "" : category,
           },
-          headers: {
-            Authorization: "Bearer SvQf1kk5MFTPMON0jxkN3DMn",
-          },
         });
         const productsArr = response.data.products;
 
@@ -97,15 +94,6 @@ function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading, hasMore]);
 
-  // if (isLoading) {
-  //   return (
-  //     <>
-  //       <div>loading...</div>
-  //       <PopUp disp={displayPopUp} />
-  //     </>
-  //   );
-  // }
-
   return (
     <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
       <HomeTopBar />
@@ -126,7 +114,7 @@ function MapItems() {
   const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); // 900–1200px
 
   const cols = isXs ? 2 : isSm ? 2 : isMd ? 3 : 4;
-  const arr = Array(12).keys()
+  const arr = Array(12).keys();
 
   if (isLoading) {
     return (
