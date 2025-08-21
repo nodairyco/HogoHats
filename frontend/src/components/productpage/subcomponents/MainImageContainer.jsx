@@ -101,6 +101,8 @@ export const MainImageContainer = ({ currentlyChosenPicture, setHeight }) => {
           sx={{
             height: { xs: "calc(100vw - 32px)", sm: "300px" },
             width: { xs: "cacc(100vw - 32px)", sm: "300px" },
+            ml:2,
+            mb:2
           }}
         >
           <Skeleton height={"100%"} width={"100%"} />

@@ -37,11 +37,11 @@ export default function GetQuantity({
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 2,
+        gap: {xs: 1, sm:2},
         backgroundColor: "primary.main",
         borderRadius: 30,
-        px:2,
-        py:1
+        px: {xs:0, sm:2},
+        py: 1,
       }}
     >
       <Button

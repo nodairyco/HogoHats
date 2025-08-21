@@ -28,11 +28,12 @@ export default function GetProductDetails({
 
       <Seperator />
 
-      <GetItemColors />
+      <GetItemColors currentProduct={currentProduct} />
 
       <Seperator />
 
       <GetItemSize
+        currentProduct={currentProduct}
         chosenSize={chosenSize}
         setChosenSize={setChosenSize}
         sizeList={sizeList}
@@ -49,29 +50,35 @@ export default function GetProductDetails({
           width: "100%",
         }}
       >
-        <GetQuantity
-          currentProduct={currentProduct}
-          chosenQuantity={chosenQuantity}
-          setChosenQuantity={setChosenQuantity}
-        />
+        {currentProduct.stock ? (
+          <>
+            <GetQuantity
+              currentProduct={currentProduct}
+              chosenQuantity={chosenQuantity}
+              setChosenQuantity={setChosenQuantity}
+            />
 
-        <Button
-          sx={{
-            width: "100%",
-            boxShadow: "none",
-            color: "primary.subTxtColor",
-            backgroundColor: "primary.bgDarker",
-            height: "56px",
-            borderRadius:'30px',
-            '&:hover':{
-               backgroundColor: "primary.submain"  
-            }
-          }}
-          onClick={handleAddToCart}
-          disabled={!chosenSize || chosenQuantity === 0}
-        >
-          <Typography fontSize={20}> Add to Cart</Typography>
-        </Button>
+            <Button
+              sx={{
+                width: "100%",
+                boxShadow: "none",
+                color: "primary.subTxtColor",
+                backgroundColor: "primary.bgDarker",
+                height: "56px",
+                borderRadius: "30px",
+                "&:hover": {
+                  backgroundColor: "primary.submain",
+                },
+              }}
+              onClick={handleAddToCart}
+              disabled={!chosenSize || chosenQuantity === 0}
+            >
+              <Typography fontSize={20}> Add to Cart</Typography>
+            </Button>
+          </>
+        ) : (
+          <Skeleton height={60} />
+        )}
       </Box>
     </Box>
   );

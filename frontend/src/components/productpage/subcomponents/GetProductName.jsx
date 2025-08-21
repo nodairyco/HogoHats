@@ -37,7 +37,7 @@ export default function GetProductName({ currentProduct }) {
           fontFamily: "Roboro, sans-serif",
         }}
       >
-        ₾ {currentProduct.price || <Skeleton />}
+        {currentProduct.price ? "₾ " + currentProduct.price : <Skeleton />}
       </Typography>
       <Typography
         id="description"

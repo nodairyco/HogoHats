@@ -1,16 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Box, Button, Container } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import { Box, Container } from "@mui/material";
 import useCart from "../../CartContext";
 import ProductContext from "../../ProductContext";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { MainImageContainer } from "./subcomponents/MainImageContainer";
 import RenderProductImages from "./subcomponents/RenderProductImages";
-import GetQuantity from "./subcomponents/GetQuantity";
-import GetItemSize from "./subcomponents/GetItemSize";
 import GetProductDetails from "./subcomponents/GetProductDetails";
 
 function ProductDetails() {
@@ -65,10 +61,6 @@ function ProductDetails() {
     fetchProduct();
   }, []);
 
-  // if (isLoading) {
-  //   return <div>loading...</div>;
-  // }
-
   return (
     <Container
       id="product-details-container"
@@ -80,7 +72,7 @@ function ProductDetails() {
         justifyContent: "center",
         overflow: "hidden",
         color: "primary.subTxtColor",
-        my:{xs:0, md: 9}
+        my: { xs: 0, md: 9 },
       }}
     >
       <Box
@@ -89,7 +81,7 @@ function ProductDetails() {
           display: "flex",
           gap: { xs: 0, md: 4 },
           flexDirection: { xs: "column-reverse", md: "row" },
-          flex: 1
+          flex: 1,
         }}
       >
         <RenderProductImages
@@ -113,7 +105,7 @@ function ProductDetails() {
           gap: 2,
           justifyContent: "space-between",
           pb: 2,
-          flex: 1
+          flex: 1,
         }}
       >
         <GetProductDetails
