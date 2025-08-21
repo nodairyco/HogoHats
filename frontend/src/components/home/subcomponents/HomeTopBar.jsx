@@ -94,78 +94,80 @@ function HomeTopBar() {
       }}
       fullWidth={true}
     >
-      <Box id="totalItems">
-        <Typography
-          variant="span"
-          sx={{
-            fontWeight: 600,
-            fontSize: { xs: "18px", sm: "24px" },
-          }}
-        >
-          Total Items: {totalItems}
-        </Typography>
-      </Box>
-      <Box
-        id="sortBy"
-        sx={{ position: "relative", display: "flex" }}
-        ref={dropDownRef}
-      >
-        {/*Button to reset sort order*/}
-        <Button
-          color="white"
-          onClick={() => {
-            setIsDropdownOpen(false);
-            setPriceDropDown(false);
-            setPriceRange({});
-            setFilters((prev) => {
-              return {
-                ...prev,
-                sortOrder: "",
-                sortBy: "",
-                minPrice: 0,
-                maxPrice: 1000000,
-              };
-            });
-          }}
-          disabled={
-            !filters.sortOrder &&
-            !filters.sortBy &&
-            !filters.minPrice &&
-            filters.maxPrice !== 10000
-          }
-        >
-          Reset
-        </Button>
+      {/* Home */}
+    {//   <Box id="totalItems">
+    //     <Typography
+    //       variant="span"
+    //       sx={{
+    //         fontWeight: 600,
+    //         fontSize: { xs: "18px", sm: "24px" },
+    //       }}
+    //     >
+    //       Total Items: {totalItems}
+    //     </Typography>
+    //   </Box>
+    //   <Box
+    //     id="sortBy"
+    //     sx={{ position: "relative", display: "flex" }}
+    //     ref={dropDownRef}
+    //   >
+    //     {/*Button to reset sort order*/}
+    //     <Button
+    //       color="white"
+    //       onClick={() => {
+    //         setIsDropdownOpen(false);
+    //         setPriceDropDown(false);
+    //         setPriceRange({});
+    //         setFilters((prev) => {
+    //           return {
+    //             ...prev,
+    //             sortOrder: "",
+    //             sortBy: "",
+    //             minPrice: 0,
+    //             maxPrice: 1000000,
+    //           };
+    //         });
+    //       }}
+    //       disabled={
+    //         !filters.sortOrder &&
+    //         !filters.sortBy &&
+    //         !filters.minPrice &&
+    //         filters.maxPrice !== 10000
+    //       }
+    //     >
+    //       Reset
+    //     </Button>
 
-        <Button
-          color="white"
-          onClick={() => {
-            setIsDropdownOpen(false);
-            setPriceDropDown((prevState) => !prevState);
-          }}
-        >
-          Price Range
-        </Button>
-        {priceDropdown &&
-          PriceDropdown(
-            priceRange,
-            setPriceRange,
-            handlePriceRangeChange,
-            handlePriceRangeApplication
-          )}
+    //     <Button
+    //       color="white"
+    //       onClick={() => {
+    //         setIsDropdownOpen(false);
+    //         setPriceDropDown((prevState) => !prevState);
+    //       }}
+    //     >
+    //       Price Range
+    //     </Button>
+    //     {priceDropdown &&
+    //       PriceDropdown(
+    //         priceRange,
+    //         setPriceRange,
+    //         handlePriceRangeChange,
+    //         handlePriceRangeApplication
+    //       )}
 
-        <Button
-          variant="text"
-          color="white"
-          onClick={() => {
-            setPriceDropDown(false);
-            setIsDropdownOpen((prevState) => !prevState);
-          }}
-        >
-          SORT
-        </Button>
-        {isDropdownOpen && SortDropdown(sortStuff, handleSorting)}
-      </Box>
+    //     <Button
+    //       variant="text"
+    //       color="white"
+    //       onClick={() => {
+    //         setPriceDropDown(false);
+    //         setIsDropdownOpen((prevState) => !prevState);
+    //       }}
+    //     >
+    //       SORT
+    //     </Button>
+    //     {isDropdownOpen && SortDropdown(sortStuff, handleSorting)}
+    //   </Box>
+    }
     </Container>
   );
 }

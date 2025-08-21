@@ -61,6 +61,7 @@ function App() {
                   flexDirection: "row",
                   marginTop: Header() === null ? "0" : "100px",
                   position: "relative",
+                  overscrollBehavior: "none",
                 }}
               >
                 <Routes>

@@ -14,6 +14,7 @@ const CartContent = ({ footerRef }) => {
   const { currentStep } = useCartSubComp();
 
   const { getCart, getCartTotal, clearCart } = useCart();
+  const cartSize = getCart()?.length;
 
   const { products, setProducts, backend } = useContext(ProductContext);
 
@@ -46,12 +47,30 @@ const CartContent = ({ footerRef }) => {
               display: "flex",
               flexDirection: "column",
               gap: 3,
+              border: "1px solid hsl(from var(--bg-color) h s calc(l * 1.5))",
+              borderRadius: "20px",
+              px: { xs: "14px", md: "24px" },
+              py: { xs: "14px", md: "20px" },
             }}
             id="cart-items"
           >
-            {getCart()?.length > 0 ? (
-              getCart()?.map((item) => {
-                return <RenderCartItem product={item} />;
+            {cartSize > 0 ? (
+              getCart()?.map((item, index) => {
+                return (
+                  <>
+                    <RenderCartItem product={item} />
+                    {index !== cartSize - 1 && (
+                      <Box
+                        sx={{
+                          borderBottom: "1px solid",
+                          borderColor:
+                            "hsl(from var(--bg-color) h s calc(l * 1.5))",
+                          width: "100%",
+                        }}
+                      />
+                    )}
+                  </>
+                );
               })
             ) : (
               <Typography variant="h6">Empty Cart</Typography>
@@ -66,27 +85,13 @@ const CartContent = ({ footerRef }) => {
   return (
     <Container maxWidth="lg" sx={{ mx: "auto", py: 2 }} id="cart-container">
       <Nav />
-      <CartHeader
-        clearCart={clearCart}
-        stepName={currentStep.toUpperCase()}
-      />
-
-      <Box
-        component="div"
-        sx={{
-          width: "100%",
-          height: "1px",
-          borderBottom:
-            "1px solid hsl(from var(--bg-color) h s calc(l * 1.25))",
-          my: 3,
-        }}
-      />
+      <CartHeader clearCart={clearCart} stepName={currentStep.toUpperCase()} />
 
       <Container
         id="cart-items-info-container"
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: { xs: "column", md: "row" },
           gap: 4,
           padding: "0 !important",
         }}

@@ -1,34 +1,11 @@
 import React, { useContext } from "react";
 import useCart from "../../../CartContext";
-import {
-  Box,
-  Button,
-  ButtonBase,
-  List,
-  ListItem,
-  styled,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, styled, Typography } from "@mui/material";
 import ProductContext from "../../../ProductContext";
-import { useNavigate } from "react-router-dom";
 
 export function RenderCartItem({ product }) {
-  const { updateQuantity, getCart, removeFromCart } = useCart();
+  const { updateQuantity, removeFromCart } = useCart();
   const { products } = useContext(ProductContext);
-  const navigate = useNavigate();
-
-  // eslint-disable-next-line no-unused-vars
-  const totalItemQuantityIncart = getCart()?.reduce((count, item) => {
-    if (item.product === product.product && item.size !== product.size) {
-      return count + item.quantity;
-    }
-    return count;
-  }, 0);
-
-  const theme = useTheme();
-
-  const txtColor = `hsl(from ${theme.palette.primary.submain} h s calc(l*0.3))`;
 
   const QuantityButton = styled(Button)(({ theme }) => ({
     background: "none",
@@ -59,73 +36,127 @@ export function RenderCartItem({ product }) {
         flexDirection: "row",
         gap: 2,
         p: 2,
-        borderRadius: "14px",
-        backgroundColor: "hsl(from var(--bg-color) h s calc(l * 1.5))",
+        color: "primary.subTxtColor",
       }}
     >
       <Box
+        component="img"
+        sx={{
+          height: { xs: 80, md: 124 },
+          aspectRatio: 1,
+          borderRadius: 2,
+          objectFit: "cover",
+        }}
+        src={product.image}
+        alt={product.name}
+        id="item-img"
+      />
+      <Box
+        id="item-deets-container"
         sx={{
           display: "flex",
-          flexDirection: "row",
-          gap: 2,
-          cursor: "pointer",
-          width: "fit-content",
-        }}
-        onClick={() => {
-          navigate(`/product/${product.product}`);
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          width: "100%",
         }}
       >
         <Box
-          component="img"
-          src={product.image}
-          alt={product.name}
-          id="item-img"
+          id="item-name-trash"
           sx={{
-            height: "100px",
-            borderRadius: "10px",
-            aspectRatio: "1/1",
-            objectFit: "cover",
-          }}
-        />
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
-        <Box
-          id="item-info-container"
-          sx={{
+            width: "100%",
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             justifyContent: "space-between",
-            color: txtColor,
+            alignItems: "center",
+            height: "fit-content",
           }}
         >
-          <Typography fontSize="14px">
-            {product.name}{" "}
-            <Typography variant="span" fontSize="18px">
-              {" "}
-              ({product.size})
-            </Typography>
+          <Typography
+            id="item-name"
+            sx={{
+              fontSize: { xs: 16, md: 20 },
+              fontWeight: 700,
+              textTransform: "capitalize",
+            }}
+          >
+            {product.name}
           </Typography>
-          <Typography>₾ {product.price.toFixed(2)}</Typography>
+          <Box
+            id="trash"
+            component="i"
+            sx={{
+              fontSize: { xs: 20, md: 24 },
+              cursor: "pointer",
+            }}
+            className="lni lni-trash-3"
+            onClick={() => removeFromCart(product.product, product.size)}
+          />
+        </Box>
+        <Box id="item-size-color">
+          <Box id="size">
+            <Typography variant="span" fontSize={16}>
+              Size:{" "}
+            </Typography>
+            <Typography
+              variant="span"
+              color="#ffffff"
+              fontSize={16}
+              fontWeight={600}
+            >
+              {product.size}
+            </Typography>
+          </Box>
+          <Box
+            id="color"
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <Typography variant="span" fontSize={16}>
+              Color:{" "}
+            </Typography>
+            <Box
+              sx={{
+                width: 20,
+                height: 20,
+                borderRadius: "50%",
+                backgroundColor: "primary.main",
+              }}
+            />
+          </Box>
         </Box>
         <Box
-          id="item-buttons"
+          id="item-price-quantity"
           sx={{
-            alignSelf: "center",
-            ml: "auto",
+            width: "100%",
             display: "flex",
-            gap: { md: 2, xs: 1 },
-            flexDirection: { md: "row", xs: "column-reverse" },
+            flexDirection: "row",
+            justifyContent: "space-between",
             alignItems: "center",
+            height: "fit-content",
+            pt: 2,
+            flexWrap: "wrap",
           }}
         >
+          <Typography
+            id="price"
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              fontStyle: "Bold",
+              fontSize: 24,
+              fontFamily: "Roboro, sans-serif",
+            }}
+          >
+            {"₾ " + product.price}
+          </Typography>
           <Box
             id="quantity-controls"
             sx={{
               display: "flex",
               gap: 2,
-              flexDirection: "row",
+              flexDirection: "row-reverse",
               alignItems: "center",
-              backgroundColor: theme.palette.primary.main,
+              backgroundColor: "primary.main",
               borderRadius: 5,
               px: 1,
               py: { md: "3px", xs: "1px" },
@@ -144,15 +175,18 @@ export function RenderCartItem({ product }) {
                   products?.find((item) => product.product === item._id)
                     ?.stock || 0
               }
+              sx={{
+                color: "primary.subTxtColor",
+              }}
             >
-              +
+              <Box
+                component={"i"}
+                className="lni lni-plus"
+                fontSize={24}
+                color="primary.subTxtColor"
+              />
             </QuantityButton>
-            <Typography
-              fontSize="14px"
-              color={`hsl(from ${theme.palette.primary.submain} h s calc(l*1.75))`}
-            >
-              {product.quantity}
-            </Typography>
+            <Typography fontSize="14px">{product.quantity}</Typography>
             <QuantityButton
               onClick={() => {
                 updateQuantity(
@@ -161,31 +195,13 @@ export function RenderCartItem({ product }) {
                   product.quantity - 1
                 );
               }}
+              sx={{
+                color: "primary.subTxtColor",
+              }}
             >
-              -
+              <Box component={"i"} className="lni lni-minus" fontSize={24} />
             </QuantityButton>
           </Box>
-          <Button
-            id="delete-item"
-            component="button"
-            sx={{
-              background: "none",
-              border: "none",
-              color: `hsl(from ${theme.palette.primary.submain} h s calc(l*1.25))`,
-              borderRadius: "50%",
-              width: "40px",
-              height: "40px",
-              minWidth: "auto",
-            }}
-            onClick={() => removeFromCart(product.product, product.size)}
-          >
-            <Box
-              className="lni lni-trash-3"
-              sx={{
-                fontSize: "24px",
-              }}
-            />
-          </Button>
         </Box>
       </Box>
     </Box>

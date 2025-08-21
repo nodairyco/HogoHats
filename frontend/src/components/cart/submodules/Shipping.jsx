@@ -19,8 +19,6 @@ const countriesAndCities = {
 export default function Shipping() {
     const { shippingData, setShippingData, errors, setErrors } = useCartSubComp();
 
-    const countries = Object.keys(countriesAndCities);
-
     const availableCities = useMemo(() => {
         return countriesAndCities.Georgia;
     }, []);
