@@ -10,7 +10,7 @@ import Shipping from "./submodules/Shipping.jsx";
 import { CartSubCompProvider, useCartSubComp } from "./CartSubCompContext.jsx";
 import Nav from "../navbar/Nav.jsx";
 
-const CartContent = ({ footerRef }) => {
+const CartContent = () => {
   const { currentStep } = useCartSubComp();
 
   const { getCart, getCartTotal, clearCart } = useCart();
@@ -97,16 +97,16 @@ const CartContent = ({ footerRef }) => {
         }}
       >
         {renderCurrentStep()}
-        <CartInfo getCartTotal={getCartTotal} footerRef={footerRef} />
+        <CartInfo getCartTotal={getCartTotal}/>
       </Container>
     </Container>
   );
 };
 
-const Cart = ({ footerRef }) => {
+const Cart = () => {
   return (
     <CartSubCompProvider>
-      <CartContent footerRef={footerRef} />
+      <CartContent />
     </CartSubCompProvider>
   );
 };

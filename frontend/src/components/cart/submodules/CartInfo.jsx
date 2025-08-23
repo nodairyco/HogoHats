@@ -1,13 +1,8 @@
-import { useTheme } from "@emotion/react";
 import { Box, Typography, Button } from "@mui/material";
 import { useCartSubComp } from "../CartSubCompContext.jsx";
 
 export default function CartInfo({ getCartTotal }) {
-  const theme = useTheme();
-
   const { currentStep, handleClick } = useCartSubComp();
-
-  const txtColor = `hsl(from ${theme.palette.primary.submain} h s calc(l*0.3))`;
 
   const getButtonText = () => {
     switch (currentStep) {

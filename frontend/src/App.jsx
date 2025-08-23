@@ -1,9 +1,9 @@
 import SignUpPage from "./components/registration/SignUpPage.jsx";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./components/home/Home.jsx";
 import LoginPage from "./components/registration/LoginPage.jsx";
 import AdminPanel from "./components/adminpanel/AdminPanel.jsx";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ProductDetails from "./components/productpage/ProductDetails.jsx";
 import Test from "./Test.jsx";
 import Header from "./components/header/Header.jsx";
@@ -29,8 +29,6 @@ function App() {
   const [totalItems, setTotalItems] = useState(0);
   const backend = import.meta.env.VITE_BACKEND || "http://localhost:5050";
 
-  const footerRef = useRef();
-
   return (
     <>
       <ProductContext.Provider
@@ -49,6 +47,7 @@ function App() {
         }}
       >
         <CartProvider>
+          <Header />
           <SkeletonTheme baseColor="#313131" highlightColor="#525252">
             <Box sx={{}}>
               <main
@@ -61,7 +60,6 @@ function App() {
                   flexDirection: "row",
                   marginTop: Header() === null ? "0" : "100px",
                   position: "relative",
-                  overscrollBehavior: "none",
                 }}
               >
                 <Routes>
@@ -72,13 +70,12 @@ function App() {
                   <Route path="login" element={<LoginPage />} />
                   <Route path="product/:id" element={<ProductDetails />} />
                   <Route path="test" element={<Test />} />
-                  <Route path="cart" element={<Cart footerRef={footerRef} />} />
+                  <Route path="cart" element={<Cart />} />
                 </Routes>
               </main>
-              <Footer ref={footerRef} />
             </Box>
           </SkeletonTheme>
-          <Header />
+          <Footer />
         </CartProvider>
       </ProductContext.Provider>
     </>
