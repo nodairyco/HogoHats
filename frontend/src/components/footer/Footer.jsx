@@ -53,6 +53,8 @@ export default function Footer() {
                 textDecoration: "none",
               }}
               href="https://www.facebook.com/profile.php?id=100088201576457"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
             />
             <Box
               component="a"
@@ -61,6 +63,8 @@ export default function Footer() {
                 textDecoration: "none",
               }}
               href="https://www.instagram.com/hogo.hats.shop"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
             />
             <Box
               component="a"
@@ -69,6 +73,8 @@ export default function Footer() {
                 textDecoration: "none",
               }}
               href="https://github.com/nodairyco/HogoHats"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
             />
           </Box>
         </Box>

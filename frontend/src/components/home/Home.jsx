@@ -1,7 +1,13 @@
 import { useContext, useEffect } from "react";
 import ProductContext from "../../ProductContext.jsx";
 import axios from "axios";
-import { Box, Container, ImageList, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Container,
+  ImageList,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import PopUp from "./subcomponents/PopUp.jsx";
 import ItemCard from "./subcomponents/ItemCard.jsx";
@@ -97,7 +103,7 @@ function Home() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
-      <Nav/>
+      <Nav />
       <HomeTopBar />
       <PopUp disp={displayPopUp} />
       <MapItems />
@@ -121,11 +127,7 @@ function MapItems() {
   if (isLoading) {
     return (
       <Container sx={{ margin: "0 auto", width: "100%" }}>
-        <ImageList
-          cols={cols}
-          gap={16}
-          sx={{ p: isXs ? 1 : 4, width: "100%", overscrollBehavior: "none" }}
-        >
+        <ImageList cols={cols} gap={16} sx={{ p: isXs ? 1 : 4, width: "100%" }}>
           {arr.map((_, index) => (
             <CardSkeleton key={index} />
           ))}
@@ -136,11 +138,7 @@ function MapItems() {
 
   return (
     <Box sx={{ margin: "0 auto", width: "100%" }}>
-      <ImageList
-        cols={cols}
-        gap={16}
-        sx={{ p: isXs ? 1 : 4, width: "100%", overscrollBehavior: "none" }}
-      >
+      <ImageList cols={cols} gap={16} sx={{ p: isXs ? 1 : 4, width: "100%" }}>
         {products.map((product) => (
           <ItemCard key={product._id} product={product} />
         ))}

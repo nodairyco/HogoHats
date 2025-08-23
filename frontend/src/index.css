@@ -17,5 +17,4 @@ html,
   background-color: var(--bg-color);
   overflow-x: hidden;
   font-family: "Raleway", sans-serif;
-  overscroll-behavior: none;
 }
